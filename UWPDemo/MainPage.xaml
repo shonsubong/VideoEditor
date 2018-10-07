@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="UWPDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:UWPDemo.Views"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Frame Margin="0,0" Grid.Row="0" Grid.Column="0" 
+                         Width="600" MinWidth="100"
+                         Background="LightGray">
+            <StackPanel Orientation="Vertical">
+                <!-- menu bar needed -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="프로젝트 라이브러리"/>
+                    <Button Grid.Column="1" Content="  "/>
+                </Grid>
+                <views:VideoClips/>
+            </StackPanel>
+        </Frame>
+
+        <Frame Grid.Row="0" Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="비디오 프리뷰"/>
+                <views:VideoPreview/>
+            </StackPanel>
+        </Frame>
+
+        <Frame Margin="0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                         Height="200"
+                         MinHeight="100"
+                         Background="White">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="스토리 보드"/>
+                <views:StoryBoard/>
+            </StackPanel>
+        </Frame>
+
+    </Grid>
+</Page>
