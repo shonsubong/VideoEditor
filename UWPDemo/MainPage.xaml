@@ -5,12 +5,19 @@
     xmlns:local="using:UWPDemo"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views="using:UWPDemo.Views"
+    xmlns:vm="using:UWPDemo.ViewModels"
+    xmlns:views="using:UWPDemo.Views"    
     mc:Ignorable="d"
+    DataContext="{Binding MainPageViewModel, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <ResourceDictionary Source="MainPageResources.xaml" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -19,31 +26,41 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <Frame Margin="0,0" Grid.Row="0" Grid.Column="0" 
+        <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <RelativePanel HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+                    <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="5" />
+                </StackPanel>
+            </RelativePanel>
+        </Frame>
+
+        <Frame Margin="0,0" Grid.Row="1" Grid.Column="0" 
                          Width="600" MinWidth="100"
-                         Background="LightGray">
+                         Background="LightGray" HorizontalAlignment="Left">
             <StackPanel Orientation="Vertical">
                 <!-- menu bar needed -->
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="20" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="프로젝트 라이브러리"/>
+
                     <Button Grid.Column="1" Content="  "/>
                 </Grid>
                 <views:VideoClips/>
             </StackPanel>
         </Frame>
 
-        <Frame Grid.Row="0" Grid.Column="1">
+        <Frame Grid.Row="1" Grid.Column="1">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="비디오 프리뷰"/>
                 <views:VideoPreview/>
             </StackPanel>
         </Frame>
 
-        <Frame Margin="0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+        <Frame Margin="0,10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                          Height="200"
                          MinHeight="100"
                          Background="White">

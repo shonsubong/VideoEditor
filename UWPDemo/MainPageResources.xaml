@@ -1,0 +1,22 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDemo"
+    xmlns:vm="using:UWPDemo.ViewModels"
+    xmlns:views="using:UWPDemo.Views">
+
+    <!--
+    <DataTemplate x:DataType="vm:StoryBoardViewModel" x:Key="StoryBoardVM">
+        <views:StoryBoard />
+    </DataTemplate>
+    
+    <DataTemplate x:DataType="vm:VideoClipsViewModel" x:Key="VideoClipsVM">
+        <views:VideoClips />
+    </DataTemplate>
+    
+    <DataTemplate x:DataType="vm:VideoPreviewViewModel" x:Key="VideoPreviewVM">
+        <views:VideoPreview />
+    </DataTemplate>
+    -->
+
+</ResourceDictionary>

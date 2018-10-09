@@ -9,6 +9,16 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <StackPanel Orientation="Vertical">            
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <RelativePanel HorizontalAlignment="Stretch">
+                    <Button x:Name="addFile" Content="+ 비디오 추가" Command="{Binding AddVideoCommand}" Margin="5" />
+                    <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+                        <Button x:Name="showSmall" Content=" " Margin="5" />
+                        <Button x:Name="showBig" Content=" " Margin="5" />
+                    </StackPanel>                    
+                </RelativePanel>
+            </ScrollViewer>
+        </StackPanel>
     </Grid>
 </Page>

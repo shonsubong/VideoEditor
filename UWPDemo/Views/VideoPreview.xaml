@@ -8,39 +8,10 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="720"/>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="trimClip.(RelativePanel.AlignTopWith)" Value="chooseFile" />
-                        <Setter Target="trimClip.(RelativePanel.RightOf)" Value="chooseFile" />
-                        <Setter Target="save.(RelativePanel.AlignTopWith)" Value="trimClip" />
-                        <Setter Target="save.(RelativePanel.RightOf)" Value="trimClip" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0"/>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="trimClip.(RelativePanel.AlignLeftWith)" Value="chooseFile" />
-                        <Setter Target="trimClip.(RelativePanel.Below)" Value="chooseFile" />
-                        <Setter Target="save.(RelativePanel.AlignLeftWith)" Value="trimClip" />
-                        <Setter Target="save.(RelativePanel.Below)" Value="trimClip" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+    <Grid>        
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <RelativePanel HorizontalAlignment="Stretch">
-                <MediaElement x:Name="mediaElement" AutoPlay="False" Margin="5" HorizontalAlignment="Stretch" AreTransportControlsEnabled="True" />
-                <Button x:Name="chooseFile" Content="1. Choose Video" Click="ChooseFile_Click" Margin="5" RelativePanel.AlignLeftWith="mediaElement" RelativePanel.Below="mediaElement" />
-                <Button x:Name="trimClip" Content="2. Trim Video" Click="TrimClip_Click" IsEnabled="False" Margin="5" />
-                <Button x:Name="save" Content="3. Save Result" Click="Save_Click" IsEnabled="False" Margin="5" />
+                <ContentControl x:Name="mediaElement" Content="{Binding VideoManger.PreviewVideo}" Margin="5" HorizontalAlignment="Stretch"  />                
             </RelativePanel>
         </ScrollViewer>
     </Grid>

@@ -71,6 +71,13 @@ namespace UWPDemo
                 // 현재 창이 활성 창인지 확인
                 Window.Current.Activate();
             }
+
+#if DEBUG
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                this.DebugSettings.EnableFrameRateCounter = true;
+            }
+#endif
         }
 
         /// <summary>
