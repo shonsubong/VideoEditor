@@ -14,7 +14,7 @@ namespace UWPDemo.ViewModels
 {
     public class VideoClipsViewModel : ViewModelBase
     {
-        private VideoManagerViewModel videoManger;
+        private VideoManagerVM videoManger;
 
         public ICommand AddVideoCommand { get; private set; }
         

@@ -9,11 +9,11 @@ namespace UWPDemo.ViewModels
 {
     public class StoryBoardViewModel : ViewModelBase
     {
-        private VideoManagerViewModel videoManger;
+        public VideoManagerVM VideoManger;
 
         public StoryBoardViewModel()
         {
-            videoManger = ViewModelDispatcher.VideoManager;            
+            VideoManger = ViewModelDispatcher.VideoManager;            
         }
       
     }

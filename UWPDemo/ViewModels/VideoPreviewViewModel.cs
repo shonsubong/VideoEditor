@@ -9,7 +9,7 @@ namespace UWPDemo.ViewModels
 {
     public class VideoPreviewViewModel : ViewModelBase
     {
-        public VideoManagerViewModel VideoManger { get; private set; }
+        public VideoManagerVM VideoManger { get; private set; }
 
         public VideoPreviewViewModel()
         {

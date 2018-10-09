@@ -29,7 +29,7 @@
         <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <RelativePanel HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                    <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="5" />
+                    <Button IsEnabled="False" x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="5" />
                 </StackPanel>
             </RelativePanel>
         </Frame>

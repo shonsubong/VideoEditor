@@ -1,10 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UWPDemo.Util;
+using UWPDemo.VideoManager;
 using Windows.Foundation;
 using Windows.Media.Core;
 using Windows.Media.Editing;
@@ -16,7 +18,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace UWPDemo.ViewModels
 {
-    public class VideoManagerViewModel : ViewModelBase
+    public class VideoManagerVM : ViewModelBase
     {
         private MainPage rootPage;
         private StorageItemAccessList storageItemAccessList;
@@ -24,6 +26,7 @@ namespace UWPDemo.ViewModels
         private MediaComposition composition;
         private MediaStreamSource mediaStreamSource;
         private MediaElement previewVideo;
+        private StoryBoard storyBoard;
 
         public MediaElement PreviewVideo
         {
@@ -34,14 +37,26 @@ namespace UWPDemo.ViewModels
                 RaisePropertyChanged();
             }
         }
-        
 
-        public VideoManagerViewModel()
+        public StoryBoard StoryBord
+        {
+            get { return storyBoard; }
+            set
+            {
+                storyBoard = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public VideoManagerVM()
         {
             rootPage = MainPage.Current;
             previewVideo = new MediaElement();
             previewVideo.AutoPlay = false;
             previewVideo.AreTransportControlsEnabled = true;
+
+            storyBoard = new StoryBoard();
 
             storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
             storageItemAccessList.Clear();
@@ -63,6 +78,8 @@ namespace UWPDemo.ViewModels
             storageItemAccessList.Add(pickedFile);
                        
             previewVideo.SetSource(await pickedFile.OpenReadAsync(), pickedFile.ContentType);
+
+            //CreateStoryBoard();
         }
 
         public async Task ExportVideoFile()
@@ -109,9 +126,19 @@ namespace UWPDemo.ViewModels
             }
             else
             {
-                rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
+                //rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
                 //EnableButtons(true);
             }
+        }
+
+        public void CreateStoryBoard()
+        {
+            storyBoard.Clear();
+
+            storyBoard.AddClip(pickedFile);
+
+            storyBoard.AddandTrimClip(pickedFile, 1000, 2000);
+
         }
 
         public void TrimVideo()

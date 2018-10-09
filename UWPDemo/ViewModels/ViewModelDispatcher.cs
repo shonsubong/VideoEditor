@@ -14,19 +14,19 @@ namespace UWPDemo.ViewModels
         private static Lazy<VideoClipsViewModel> videoClipsViewModel;
         private static Lazy<VideoPreviewViewModel> videoPreviewViewModel;
         private static Lazy<StoryBoardViewModel> storyBoardViewModel;
-        private static Lazy<VideoManagerViewModel> videoManager;
+        private static Lazy<VideoManagerVM> videoManager;
 
 
         /// <summary>
         /// Ensures there is one Video Manager view model and its only created when referenced.
         /// </summary>
-        public static VideoManagerViewModel VideoManager
+        public static VideoManagerVM VideoManager
         {
             get
             {
                 if (videoManager == null)
                 {
-                    videoManager = new Lazy<VideoManagerViewModel>();
+                    videoManager = new Lazy<VideoManagerVM>();
                 }
                 return videoManager.Value;
             }

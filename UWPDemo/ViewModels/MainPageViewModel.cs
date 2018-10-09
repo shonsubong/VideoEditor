@@ -15,7 +15,7 @@ namespace UWPDemo.ViewModels
         private VideoClipsViewModel videoClipsVM;
         private VideoPreviewViewModel videoPreviewVM;
         private StoryBoardViewModel storyBoardVM;
-        private VideoManagerViewModel videoManger;
+        private VideoManagerVM videoManger;
 
         public ICommand ExportVideoCommand { get; private set; }
 
