@@ -26,7 +26,7 @@ namespace UWPDemo.ViewModels
 
         private async void ExecuteAddVideo()
         {
-            await videoManger.ImportVideoFileAsync();
+            videoManger.ImportVideoFileAsync();
         }
     }
 }

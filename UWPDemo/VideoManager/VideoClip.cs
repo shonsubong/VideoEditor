@@ -14,12 +14,24 @@ namespace UWPDemo.VideoManager
 {
     public class VideoClip : ViewModelBase
     {
-        private StorageFile file;
         public MediaClip Clip { get; private set; }
 
         private MediaComposition composition;
 
-        public ImageSource ImgSource { get; set; }
+        private ImageSource imgSource;
+
+        public ImageSource ImgSource
+        {
+            get
+            {
+                return imgSource;
+            }
+            set
+            {
+                imgSource = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public long StartTick
         {
@@ -36,17 +48,10 @@ namespace UWPDemo.VideoManager
         }
 
         
-        public VideoClip(StorageFile file)
+        public VideoClip(MediaClip clip)
         {
-            this.file = file;
-            initalize();            
-        }
-
-        private async void initalize()
-        {
-            Clip = await MediaClip.CreateFromFileAsync(file);
+            this.Clip = clip;
             composition = new MediaComposition();
-            composition.Clips.Add(Clip);
         }
         
         public void ClearTrim()
@@ -58,31 +63,24 @@ namespace UWPDemo.VideoManager
         {
             Clip.TrimTimeFromStart = new TimeSpan(startTick);
             Clip.TrimTimeFromEnd = new TimeSpan(endTick);
-
-            //ImageSource = GetBitmapThumbnail();
+            //UpdateBitmapThumbnail();
         }
-
-
-        public async Task<BitmapImage> GetBitmapThumbnail()
+        
+        public async void UpdateBitmapThumbnail()
         {
             BitmapImage bitmap = new BitmapImage();
-
-            var thumbnail = await GetThumbnailAsync(file);
+            
+            composition.Clips.Add(Clip);
+            var thumbnail = await composition.GetThumbnailAsync(Clip.StartTimeInComposition,
+                100, 100, VideoFramePrecision.NearestFrame);
+            
             InMemoryRandomAccessStream randomAccessStream = new InMemoryRandomAccessStream();
             await RandomAccessStream.CopyAsync(thumbnail, randomAccessStream);
             randomAccessStream.Seek(0);
             bitmap.SetSource(randomAccessStream);
+            composition.Clips.Clear();
 
-            return bitmap;
-        }
-
-        private async Task<IInputStream> GetThumbnailAsync(StorageFile file)
-        {
-            var mediaComposition = new MediaComposition();
-            mediaComposition.Clips.Add(Clip);
-            return await mediaComposition.GetThumbnailAsync(Clip.StartTimeInComposition, 
-                0, 0, VideoFramePrecision.NearestFrame);
-        }
-
+            ImgSource = bitmap;           
+        }        
     }
 }

@@ -20,13 +20,14 @@ namespace UWPDemo.ViewModels
 {
     public class VideoManagerVM : ViewModelBase
     {
-        private MainPage rootPage;
+        private MainPage rootPage { get { return MainPage.Current; } }
         private StorageItemAccessList storageItemAccessList;
         private StorageFile pickedFile;
-        private MediaComposition composition;
+        
         private MediaStreamSource mediaStreamSource;
         private MediaElement previewVideo;
         private StoryBoard storyBoard;
+        private MediaComposition composition { get { return storyBoard.Composition; } }
 
         public MediaElement PreviewVideo
         {
@@ -50,17 +51,22 @@ namespace UWPDemo.ViewModels
 
 
         public VideoManagerVM()
-        {
-            rootPage = MainPage.Current;
+        {            
             previewVideo = new MediaElement();
             previewVideo.AutoPlay = false;
             previewVideo.AreTransportControlsEnabled = true;
 
             storyBoard = new StoryBoard();
+            storyBoard.StoryBoardClipsUpdated += storyBoard_StoryBoardClipsUpdated;
 
             storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
             storageItemAccessList.Clear();
 
+        }
+
+        private void storyBoard_StoryBoardClipsUpdated(object sender, EventArgs e)
+        {
+            UpdatePreviewVideo();
         }
 
         public async Task ImportVideoFileAsync()
@@ -74,71 +80,102 @@ namespace UWPDemo.ViewModels
                 //rootPage.NotifyUser("File picking cancelled", NotifyType.ErrorMessage);
                 return;
             }
-
             storageItemAccessList.Add(pickedFile);
-                       
-            previewVideo.SetSource(await pickedFile.OpenReadAsync(), pickedFile.ContentType);
 
-            //CreateStoryBoard();
+            CreateStoryBoard();
+        }
+
+        public void UpdatePreviewVideo()
+        {
+            storyBoard.UpdateStoryBoard();
+
+            previewVideo.Position = TimeSpan.Zero;
+
+            mediaStreamSource = composition.GeneratePreviewMediaStreamSource((int)previewVideo.ActualWidth, (int)previewVideo.ActualHeight);
+            if(mediaStreamSource != null)
+                previewVideo.SetMediaStreamSource(mediaStreamSource);
+      
+            //previewVideo.SetSource(await pickedFile.OpenReadAsync(), pickedFile.ContentType);
         }
 
         public async Task ExportVideoFile()
         {
-            var picker = new Windows.Storage.Pickers.FileSavePicker();
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
-            picker.FileTypeChoices.Add("MP4 files", new List<string>() { ".mp4" });
-            picker.SuggestedFileName = "TrimmedClip.mp4";
+            try
+            {
+                var picker = new Windows.Storage.Pickers.FileSavePicker();
+                picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.VideosLibrary;
+                picker.FileTypeChoices.Add("MP4 files", new List<string>() { ".mp4" });
+                picker.SuggestedFileName = "TrimmedClip.mp4";
 
-            StorageFile file = await picker.PickSaveFileAsync();
-            if (file != null && composition != null)
-            {
-                var saveOperation = composition.RenderToFileAsync(file, MediaTrimmingPreference.Precise);
-                saveOperation.Progress = new AsyncOperationProgressHandler<TranscodeFailureReason, double>(async (info, progress) =>
+                
+                StorageFile file = await picker.PickSaveFileAsync();
+                                
+                if (file != null && composition != null)
                 {
-                    await rootPage.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+                    var saveOperation = composition.RenderToFileAsync(file, MediaTrimmingPreference.Precise);
+                    saveOperation.Progress = new AsyncOperationProgressHandler<TranscodeFailureReason, double>(async (info, progress) =>
                     {
-                        rootPage.NotifyUser(string.Format("Saving file... Progress: {0:F0}%", progress), NotifyType.StatusMessage);
-                    }));
-                });
-                saveOperation.Completed = new AsyncOperationWithProgressCompletedHandler<TranscodeFailureReason, double>(async (info, status) =>
+                        await rootPage.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+                        {
+                            rootPage.NotifyUser(string.Format("Saving file... Progress: {0:F0}%", progress), NotifyType.StatusMessage);
+                        }));
+                    });
+                    saveOperation.Completed = new AsyncOperationWithProgressCompletedHandler<TranscodeFailureReason, double>(async (info, status) =>
+                    {
+                        await rootPage.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+                        {
+                            try
+                            {
+                                var results = info.GetResults();
+                                if (results != TranscodeFailureReason.None || status != AsyncStatus.Completed)
+                                {
+                                    rootPage.NotifyUser("Saving was unsuccessful", NotifyType.ErrorMessage);
+                                }
+                                else
+                                {
+                                    rootPage.NotifyUser("Trimmed clip saved to file", NotifyType.StatusMessage);
+                                }
+                            }
+                            finally
+                            {
+                                // Remember to re-enable controls on both success and failure
+                                //EnableButtons(true);
+                            }
+                        }));
+                    });
+                }
+                else
                 {
-                    await rootPage.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
-                    {
-                        try
-                        {
-                            var results = info.GetResults();
-                            if (results != TranscodeFailureReason.None || status != AsyncStatus.Completed)
-                            {
-                                rootPage.NotifyUser("Saving was unsuccessful", NotifyType.ErrorMessage);
-                            }
-                            else
-                            {
-                                rootPage.NotifyUser("Trimmed clip saved to file", NotifyType.StatusMessage);
-                            }
-                        }
-                        finally
-                        {
-                            // Remember to re-enable controls on both success and failure
-                            //EnableButtons(true);
-                        }
-                    }));
-                });
+                    rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
+                    //EnableButtons(true);
+                }
             }
-            else
+            catch(Exception e)
             {
-                //rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
-                //EnableButtons(true);
+
             }
+            
         }
 
         public void CreateStoryBoard()
         {
-            storyBoard.Clear();
+            try
+            {
+                storyBoard.Clear();
 
-            storyBoard.AddClip(pickedFile);
+                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
 
-            storyBoard.AddandTrimClip(pickedFile, 1000, 2000);
+                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
 
+                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+
+                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         public void TrimVideo()

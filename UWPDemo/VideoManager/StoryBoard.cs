@@ -14,23 +14,42 @@ namespace UWPDemo.VideoManager
     {
 
         public ObservableCollection<VideoClip> StoryBoardClips { get; private set; }
+        public EventHandler StoryBoardClipsUpdated;
+
         private MediaComposition composition;
+        public MediaComposition Composition
+        {
+            get
+            {
+                return composition;
+            }
+            private set
+            {
+                composition = value;
+            }
+        }
 
         public StoryBoard()
         {
             StoryBoardClips = new ObservableCollection<VideoClip>();
-            composition = new MediaComposition();
+            StoryBoardClips.CollectionChanged += StoryBoardClips_CollectionChanged;
+            Composition = new MediaComposition();
         }
 
-        public void AddClip(StorageFile file)
+        private void StoryBoardClips_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {            
+            StoryBoardClipsUpdated?.Invoke(this, null);
+        }
+
+        public async void AddClip(StorageFile file)
         {
-            VideoClip clip = new VideoClip(file);
+            VideoClip clip = new VideoClip(await MediaClip.CreateFromFileAsync(file));
             StoryBoardClips.Add(clip);
         }
 
-        public void AddandTrimClip(StorageFile file, long startTick, long endTick)
+        public async void AddandTrimClip(StorageFile file, long startTick, long endTick)
         {
-            VideoClip clip = new VideoClip(file);            
+            VideoClip clip = new VideoClip(await MediaClip.CreateFromFileAsync(file));            
             StoryBoardClips.Add(clip);
             clip.Trim(startTick, endTick);
         }
@@ -40,19 +59,14 @@ namespace UWPDemo.VideoManager
             StoryBoardClips.Clear();
         }
 
-        public MediaComposition GetAppendVideo()
+        public void UpdateStoryBoard()
         {
             composition.Clips.Clear();
 
             foreach(VideoClip videoClip in StoryBoardClips)
             {
-                composition.Clips.Add(videoClip.Clip);
+                Composition.Clips.Add(videoClip.Clip);
             }
-
-            return composition;
         }
-
-
-
     }
 }
