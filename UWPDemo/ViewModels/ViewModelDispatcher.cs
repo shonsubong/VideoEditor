@@ -11,7 +11,7 @@ namespace UWPDemo.ViewModels
     /// </summary>
     static class ViewModelDispatcher
     {        
-        private static Lazy<VideoClipsViewModel> videoClipsViewModel;
+        private static Lazy<VideoLibraryViewModel> videoLibraryViewModel;
         private static Lazy<VideoPreviewViewModel> videoPreviewViewModel;
         private static Lazy<StoryBoardViewModel> storyBoardViewModel;
         private static Lazy<VideoManagerVM> videoManager;
@@ -33,17 +33,17 @@ namespace UWPDemo.ViewModels
         }
 
         /// <summary>
-        /// Ensures there is one Video Clips view model and its only created when referenced.
+        /// Ensures there is one Video Library view model and its only created when referenced.
         /// </summary>
-        public static VideoClipsViewModel VideoClipsViewModel
+        public static VideoLibraryViewModel VideoLIbraryViewModel
         {
             get
             {
-                if (videoClipsViewModel == null)
+                if (videoLibraryViewModel == null)
                 {
-                    videoClipsViewModel = new Lazy<VideoClipsViewModel>();
+                    videoLibraryViewModel = new Lazy<VideoLibraryViewModel>();
                 }
-                return videoClipsViewModel.Value;
+                return videoLibraryViewModel.Value;
             }
         }
 

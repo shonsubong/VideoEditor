@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="UWPDemo.Views.VideoClips"
+    x:Class="UWPDemo.Views.VideoLibrary"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:UWPDemo.Views"
@@ -14,11 +14,10 @@
                 <RelativePanel HorizontalAlignment="Stretch">
                     <Button x:Name="addFile" Content="+ 비디오 추가" Command="{Binding AddVideoCommand}" Margin="5" />
                     <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                        <Button x:Name="showSmall" Content=" " Margin="5" />
-                        <Button x:Name="showBig" Content=" " Margin="5" />
                     </StackPanel>                    
                 </RelativePanel>
             </ScrollViewer>
+            
         </StackPanel>
     </Grid>
 </Page>

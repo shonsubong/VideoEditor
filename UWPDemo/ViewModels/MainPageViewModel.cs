@@ -12,7 +12,7 @@ namespace UWPDemo.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        private VideoClipsViewModel videoClipsVM;
+        private VideoLibraryViewModel videoClipsVM;
         private VideoPreviewViewModel videoPreviewVM;
         private StoryBoardViewModel storyBoardVM;
         private VideoManagerVM videoManger;
@@ -22,7 +22,7 @@ namespace UWPDemo.ViewModels
 
         public MainPageViewModel()
         {
-            videoClipsVM = ViewModelDispatcher.VideoClipsViewModel;
+            videoClipsVM = ViewModelDispatcher.VideoLIbraryViewModel;
             videoPreviewVM = ViewModelDispatcher.VideoPreviewViewModel;
             storyBoardVM = ViewModelDispatcher.StoryBoardViewModel;
             videoManger = ViewModelDispatcher.VideoManager;

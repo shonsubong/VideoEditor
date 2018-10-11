@@ -81,5 +81,76 @@ namespace UWPDemo
             //    peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
             //}
         }
+
+        private void videoClipsShowButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            VideoSplitView.IsPaneOpen = !VideoSplitView.IsPaneOpen;
+
+            if(VideoSplitView.IsPaneOpen)
+            {
+                VideoLibraryTitle.Visibility = Visibility.Visible;
+                VideoLibraryView.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                VideoLibraryTitle.Visibility = Visibility.Collapsed;
+                VideoLibraryView.Visibility = Visibility.Collapsed;
+            }
+                
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            JudgeWidth(e.NewSize.Width);
+        }
+
+        private enum WidthEnum
+        {
+            Initialize,
+
+            PhoneNarrow,
+            PhoneStrath,
+
+            Pad,
+            Pc
+        }
+        WidthEnum owe = WidthEnum.Initialize;//OldWidthEnum
+        WidthEnum nwe = WidthEnum.Initialize;//NewWidthEnum
+
+        private void JudgeWidth(double w)
+        {
+            if (w < 600) nwe = WidthEnum.PhoneNarrow;
+            else if (w >= 600 && w < 800) nwe = WidthEnum.PhoneStrath;
+            else if (w >= 800 && w < 1000) nwe = WidthEnum.Pad;
+            else if (w >= 1000) nwe = WidthEnum.Pc;
+
+            if (nwe != owe)
+            {
+
+                if (nwe == WidthEnum.PhoneNarrow || nwe == WidthEnum.PhoneStrath)
+                {
+                    VideoSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+                    VideoSplitView.IsPaneOpen = false;
+
+                    ZoomSlider.Visibility = Visibility.Collapsed;
+                    SplitButton.Visibility = Visibility.Visible;
+                }
+                else if (nwe == WidthEnum.Pad || nwe == WidthEnum.Pc)
+                {
+                    VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
+                    VideoSplitView.IsPaneOpen = true;
+
+                    ZoomSlider.Visibility = Visibility.Visible;
+                    SplitButton.Visibility = Visibility.Collapsed;
+                }
+                
+                owe = nwe;
+            }
+        }
+
+        private void SplitButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
+        }
     }
 }

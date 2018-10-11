@@ -14,12 +14,35 @@ namespace UWPDemo.VideoManager
 {
     public class VideoClip : ViewModelBase
     {
+        private StorageFile file;
         public MediaClip Clip { get; private set; }
 
         private MediaComposition composition;
 
-        private ImageSource imgSource;
 
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private SolidColorBrush brush;
+        public SolidColorBrush Brush
+        {
+            get { return brush; }
+            set
+            {
+                brush = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ImageSource imgSource;
         public ImageSource ImgSource
         {
             get
@@ -48,12 +71,13 @@ namespace UWPDemo.VideoManager
         }
 
         
-        public VideoClip(MediaClip clip)
+        public VideoClip(StorageFile file, MediaClip clip)
         {
+            this.file = file;
             this.Clip = clip;
-            composition = new MediaComposition();
+            composition = new MediaComposition();           
         }
-        
+
         public void ClearTrim()
         {
             Trim(0, Clip.OriginalDuration.Ticks);
@@ -62,25 +86,37 @@ namespace UWPDemo.VideoManager
         public void Trim(long startTick, long endTick)
         {
             Clip.TrimTimeFromStart = new TimeSpan(startTick);
-            Clip.TrimTimeFromEnd = new TimeSpan(endTick);
+            long trimTickFromEnd = Clip.OriginalDuration.Ticks - endTick;
+            Clip.TrimTimeFromEnd = new TimeSpan(trimTickFromEnd);
             //UpdateBitmapThumbnail();
         }
-        
+
+        public void Trim(double startSec, double endSec)
+        {
+            Clip.TrimTimeFromStart = TimeSpan.FromSeconds(startSec);
+            double trimSecondFromEnd = Clip.OriginalDuration.TotalSeconds - endSec;
+            Clip.TrimTimeFromEnd = TimeSpan.FromSeconds(trimSecondFromEnd);
+            //UpdateBitmapThumbnail();
+        }
+
         public async void UpdateBitmapThumbnail()
         {
-            BitmapImage bitmap = new BitmapImage();
-            
-            composition.Clips.Add(Clip);
-            var thumbnail = await composition.GetThumbnailAsync(Clip.StartTimeInComposition,
-                100, 100, VideoFramePrecision.NearestFrame);
-            
+            var thumbnail = await GetThumbnailAsync(file);
             InMemoryRandomAccessStream randomAccessStream = new InMemoryRandomAccessStream();
             await RandomAccessStream.CopyAsync(thumbnail, randomAccessStream);
             randomAccessStream.Seek(0);
-            bitmap.SetSource(randomAccessStream);
-            composition.Clips.Clear();
 
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(randomAccessStream);            
             ImgSource = bitmap;           
-        }        
+        }
+
+        public async Task<IInputStream> GetThumbnailAsync(StorageFile file)
+        {
+            var mediaClip = Clip.Clone();
+            var mediaComposition = new MediaComposition();
+            mediaComposition.Clips.Add(mediaClip);
+            return await mediaComposition.GetThumbnailAsync(mediaClip.StartTimeInComposition, 200, 300, VideoFramePrecision.NearestFrame);
+        }
     }
 }

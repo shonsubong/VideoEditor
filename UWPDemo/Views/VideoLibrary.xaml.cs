@@ -21,12 +21,12 @@ namespace UWPDemo.Views
     /// <summary>
     /// 자체적으로 사용하거나 프레임 내에서 탐색할 수 있는 빈 페이지입니다.
     /// </summary>
-    public sealed partial class VideoClips : Page
+    public sealed partial class VideoLibrary : Page
     {
-        public VideoClips()
+        public VideoLibrary()
         {
             this.InitializeComponent();
-            this.DataContext = ViewModelDispatcher.VideoClipsViewModel;
+            this.DataContext = ViewModelDispatcher.VideoLIbraryViewModel;
         }
     }
 }

@@ -21,13 +21,23 @@ namespace UWPDemo.Views
     /// <summary>
     /// 자체적으로 사용하거나 프레임 내에서 탐색할 수 있는 빈 페이지입니다.
     /// </summary>
-    public sealed partial class StoryBoard : Page
+    public sealed partial class StoryBoardView : Page
     {
-        public StoryBoard()
+        public StoryBoardView()
         {
             this.InitializeComponent();
 
             this.DataContext = ViewModelDispatcher.StoryBoardViewModel;
+        }
+
+        private void StoryList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+
+        }
+
+        private void StoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

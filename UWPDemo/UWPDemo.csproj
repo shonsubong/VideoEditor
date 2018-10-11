@@ -103,20 +103,22 @@
     <Compile Include="Models\IDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\EnumTypes.cs" />
+    <Compile Include="Models\Clip.cs" />
+    <Compile Include="Models\Media.cs" />
     <Compile Include="VideoManager\StoryBoard.cs" />
     <Compile Include="VideoManager\VideoClip.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="VideoManager\VideoManagerVM.cs" />
     <Compile Include="ViewModels\VideoPreviewViewModel.cs" />
-    <Compile Include="ViewModels\VideoClipsViewModel.cs" />
+    <Compile Include="ViewModels\VideoLibraryViewModel.cs" />
     <Compile Include="ViewModels\StoryBoardViewModel.cs" />
     <Compile Include="ViewModels\ViewModelDispatcher.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Compile Include="Views\StoryBoard.xaml.cs">
-      <DependentUpon>StoryBoard.xaml</DependentUpon>
+    <Compile Include="Views\StoryBoardView.xaml.cs">
+      <DependentUpon>StoryBoardView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VideoClips.xaml.cs">
-      <DependentUpon>VideoClips.xaml</DependentUpon>
+    <Compile Include="Views\VideoLibrary.xaml.cs">
+      <DependentUpon>VideoLibrary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VideoPreview.xaml.cs">
       <DependentUpon>VideoPreview.xaml</DependentUpon>
@@ -151,11 +153,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StoryBoard.xaml">
+    <Page Include="Views\StoryBoardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\VideoClips.xaml">
+    <Page Include="Views\VideoLibrary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -23,7 +23,7 @@ namespace UWPDemo.ViewModels
 
         private async void ExecuteRefreshVideo()
         {
-            VideoManger.UpdatePreviewVideo();
+            VideoManger.RefreshPreviewVideo();
         }
     }
 }

@@ -64,11 +64,6 @@ namespace UWPDemo.ViewModels
 
         }
 
-        private void storyBoard_StoryBoardClipsUpdated(object sender, EventArgs e)
-        {
-            UpdatePreviewVideo();
-        }
-
         public async Task ImportVideoFileAsync()
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -82,12 +77,23 @@ namespace UWPDemo.ViewModels
             }
             storageItemAccessList.Add(pickedFile);
 
-            CreateStoryBoard();
+            SplitVideoFile();
         }
 
-        public void UpdatePreviewVideo()
+        private void storyBoard_StoryBoardClipsUpdated(object sender, EventArgs e)
         {
-            storyBoard.UpdateStoryBoard();
+            RefreshStoryBoard();
+            //RefreshPreviewVideo();
+        }
+
+        public void RefreshStoryBoard()
+        {
+            storyBoard.RefreshAllThumbnails();
+        }
+
+        public void RefreshPreviewVideo()
+        {
+            storyBoard.AppendAllClips();
 
             previewVideo.Position = TimeSpan.Zero;
 
@@ -157,19 +163,22 @@ namespace UWPDemo.ViewModels
             
         }
 
-        public void CreateStoryBoard()
+        public void SplitVideoFile()
         {
             try
             {
                 storyBoard.Clear();
 
-                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+                storyBoard.AddandTrimSecClip(pickedFile, 0, 1);
 
-                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+                storyBoard.AddandTrimSecClip(pickedFile, 1, 2);
 
-                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+                storyBoard.AddandTrimSecClip(pickedFile, 2, 3);
 
-                storyBoard.AddandTrimClip(pickedFile, 0, 80000000);
+                storyBoard.AddandTrimSecClip(pickedFile, 3, 4);
+
+                storyBoard.AddandTrimSecClip(pickedFile, 4, 5);
+
 
             }
             catch (Exception e)

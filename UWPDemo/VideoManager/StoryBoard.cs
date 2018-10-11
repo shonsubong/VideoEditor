@@ -12,28 +12,16 @@ namespace UWPDemo.VideoManager
 {
     public class StoryBoard : ViewModelBase
     {
+        public ObservableCollection<VideoClip> Clips { get; private set; }
 
-        public ObservableCollection<VideoClip> StoryBoardClips { get; private set; }
+        public MediaComposition Composition = new MediaComposition();
+
         public EventHandler StoryBoardClipsUpdated;
-
-        private MediaComposition composition;
-        public MediaComposition Composition
-        {
-            get
-            {
-                return composition;
-            }
-            private set
-            {
-                composition = value;
-            }
-        }
 
         public StoryBoard()
         {
-            StoryBoardClips = new ObservableCollection<VideoClip>();
-            StoryBoardClips.CollectionChanged += StoryBoardClips_CollectionChanged;
-            Composition = new MediaComposition();
+            Clips = new ObservableCollection<VideoClip>();
+            Clips.CollectionChanged += StoryBoardClips_CollectionChanged;
         }
 
         private void StoryBoardClips_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -43,29 +31,44 @@ namespace UWPDemo.VideoManager
 
         public async void AddClip(StorageFile file)
         {
-            VideoClip clip = new VideoClip(await MediaClip.CreateFromFileAsync(file));
-            StoryBoardClips.Add(clip);
+            VideoClip clip = new VideoClip(file, await MediaClip.CreateFromFileAsync(file));
+            Clips.Add(clip);
         }
 
-        public async void AddandTrimClip(StorageFile file, long startTick, long endTick)
+        public async void AddandTrimTickClip(StorageFile file, long startTick, long endTick)
         {
-            VideoClip clip = new VideoClip(await MediaClip.CreateFromFileAsync(file));            
-            StoryBoardClips.Add(clip);
+            VideoClip clip = new VideoClip(file, await MediaClip.CreateFromFileAsync(file));            
+            Clips.Add(clip);
             clip.Trim(startTick, endTick);
+        }
+
+        public async void AddandTrimSecClip(StorageFile file, double startSec, double endSec)
+        {
+            VideoClip clip = new VideoClip(file, await MediaClip.CreateFromFileAsync(file));
+            Clips.Add(clip);
+            clip.Trim(startSec, endSec);
         }
 
         public void Clear()
         {
-            StoryBoardClips.Clear();
+            Clips.Clear();
         }
 
-        public void UpdateStoryBoard()
+        public void AppendAllClips()
         {
-            composition.Clips.Clear();
+            Composition.Clips.Clear();
 
-            foreach(VideoClip videoClip in StoryBoardClips)
+            foreach(VideoClip videoClip in Clips)
             {
                 Composition.Clips.Add(videoClip.Clip);
+            }
+        }
+
+        public void RefreshAllThumbnails()
+        {
+            foreach (VideoClip videoClip in Clips)
+            {
+                videoClip.UpdateBitmapThumbnail();
             }
         }
     }
