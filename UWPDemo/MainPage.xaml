@@ -37,8 +37,7 @@
         <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="0" DisplayMode="Overlay" IsPaneOpen="False" >
 
             <SplitView.Content>
-                <!--<MediaPlayerElement x:Name="MediaPlayerElement" Grid.Row="1" AutoPlay="True"  Source="d:\TrimmedClip.mp4"/>-->
-                <views:VideoPreview Grid.Row="1" Background="Transparent"/>
+                <views:VideoPreview  Grid.Row="1" Background="Transparent"/>
             </SplitView.Content>
             
             <SplitView.Pane >
@@ -99,7 +98,7 @@
         <Grid Grid.Row="3">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="스토리 보드"/>
-                <views:StoryBoardView/>
+                <views:StoryBoardView x:Name="StoryBoardView"/>
             </StackPanel>
         </Grid>
 

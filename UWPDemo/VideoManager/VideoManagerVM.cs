@@ -25,8 +25,8 @@ namespace UWPDemo.ViewModels
         private StorageItemAccessList storageItemAccessList;
         private StorageFile pickedFile;
 
+        public MediaElement previewVideo;
         private MediaStreamSource mediaStreamSource;
-        private MediaElement previewVideo;
         private StoryBoard storyBoard;
         private MediaComposition composition { get { return storyBoard.Composition; } }
 
@@ -56,11 +56,12 @@ namespace UWPDemo.ViewModels
 
 
         public VideoManagerVM()
-        {            
+        {
             previewVideo = new MediaElement();
             previewVideo.AutoPlay = false;
             previewVideo.AreTransportControlsEnabled = true;
 
+            
             storyBoard = new StoryBoard();
             storyBoard.StoryBoardClipsUpdated += storyBoard_StoryBoardClipsUpdated;
 
@@ -99,8 +100,23 @@ namespace UWPDemo.ViewModels
             mediaStreamSource = composition.GeneratePreviewMediaStreamSource(0,0);
             if (mediaStreamSource != null)
                 previewVideo.SetMediaStreamSource(mediaStreamSource);
-      
-            //previewVideo.SetSource(await pickedFile.OpenReadAsync(), pickedFile.ContentType);
+        }
+
+        public void SetPreviewVideoPositionTo(Clip clip)
+        {
+            previewVideo.Position = new TimeSpan(clip.MediaClip.StartTimeInComposition.Ticks+1);
+        }
+
+        public void SetStoryBoardSelectItemTo(TimeSpan position)
+        {
+            foreach(Clip clip in storyBoard.Clips)
+            {
+                if(position > clip.MediaClip.StartTimeInComposition && position <= clip.MediaClip.EndTimeInComposition)
+                {
+                    rootPage.CurStoryBoardView.CurStoryList.SelectedItem = clip;
+                    return;
+                }
+            }
         }
 
         public async Task ExportVideoFile()
@@ -152,6 +168,7 @@ namespace UWPDemo.ViewModels
                 else
                 {
                     rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
+                    
                     //EnableButtons(true);
                 }
             }
@@ -168,15 +185,17 @@ namespace UWPDemo.ViewModels
             {
                 storyBoard.Clear();
 
-                storyBoard.AddandTrimSecClip(media, 0, 1);
+                double step = 1.5;
 
-                storyBoard.AddandTrimSecClip(media, 1, 2);
+                storyBoard.AddandTrimSecClip(media, 0, 1 * step);
 
-                storyBoard.AddandTrimSecClip(media, 2, 3);
+                storyBoard.AddandTrimSecClip(media, 1 * step, 2 * step);
 
-                storyBoard.AddandTrimSecClip(media, 3, 4);
+                storyBoard.AddandTrimSecClip(media, 2 * step, 3 * step);
 
-                storyBoard.AddandTrimSecClip(media, 4, 5);
+                storyBoard.AddandTrimSecClip(media, 3 * step, 4 * step);
+
+                storyBoard.AddandTrimSecClip(media, 4 * step, 5 * step);
 
 
             }

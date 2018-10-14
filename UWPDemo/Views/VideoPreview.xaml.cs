@@ -31,12 +31,21 @@ namespace UWPDemo.Views
     /// </summary>
     public sealed partial class VideoPreview : Page
     {
-         public VideoPreview()
+        private MediaElement previewVideo;
+
+        public VideoPreview()
         {
             this.InitializeComponent();
             this.DataContext = App.VideoManager;
-        }       
+            this.previewVideo = App.VideoManager.PreviewVideo;
+            this.previewVideo.SeekCompleted += PreviewVideo_SeekCompleted;
+        }
 
+        private void PreviewVideo_SeekCompleted(object sender, RoutedEventArgs e)
+        {
+            App.VideoManager.SetStoryBoardSelectItemTo(previewVideo.Position);
+        }
+    
         private void VideoRefreshButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             App.VideoManager.RefreshPreviewVideo();

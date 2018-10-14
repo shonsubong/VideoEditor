@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UWPDemo.Util;
+using UWPDemo.Views;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -25,6 +26,9 @@ namespace UWPDemo
     public sealed partial class MainPage : Page
     {
         public static MainPage Current;
+
+        public StoryBoardView CurStoryBoardView { get { return StoryBoardView; } }
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,6 +52,7 @@ namespace UWPDemo
 
         private void UpdateStatus(string strMessage, NotifyType type)
         {
+            
             //switch (type)
             //{
             //    case NotifyType.StatusMessage:

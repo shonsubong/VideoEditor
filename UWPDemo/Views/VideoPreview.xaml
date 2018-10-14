@@ -10,11 +10,10 @@
 
     <Grid>
         <ContentControl x:Name="mediaElement" Content="{Binding PreviewVideo}" Margin="5"/>
-        
+                
         <StackPanel Orientation="Vertical">            
             <TextBlock Text="비디오 프리뷰"/>
             <Button x:Name="VideoRefreshButton" Content="비디오 갱신" Tapped="VideoRefreshButton_Tapped"  Command="{Binding RefreshVideoCommand}" Margin="5" />
-            
         </StackPanel>
                 
     </Grid>

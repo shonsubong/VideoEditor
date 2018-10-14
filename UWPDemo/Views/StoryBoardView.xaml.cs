@@ -25,6 +25,8 @@ namespace UWPDemo.Views
     /// </summary>
     public sealed partial class StoryBoardView : Page
     {
+
+        public GridView CurStoryList { get { return StoryList; } }
         public StoryBoardView()
         {
             this.InitializeComponent();
@@ -38,7 +40,11 @@ namespace UWPDemo.Views
 
         private void StoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Clip clip = StoryList.SelectedItem as Clip;
+            if(clip != null)
+            {
+                App.VideoManager.SetPreviewVideoPositionTo(clip);
+            }
         }
 
         private void StoryList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
