@@ -39,6 +39,19 @@ namespace UWPDemo.Views
             this.DataContext = App.VideoManager;
             this.previewVideo = App.VideoManager.PreviewVideo;
             this.previewVideo.SeekCompleted += PreviewVideo_SeekCompleted;
+            this.previewVideo.RateChanged += PreviewVideo_RateChanged;
+            this.previewVideo.MarkerReached += PreviewVideo_MarkerReached;
+            //this.previewVideo.TransportControls
+        }
+
+        private void PreviewVideo_MarkerReached(object sender, TimelineMarkerRoutedEventArgs e)
+        {
+            App.VideoManager.SetStoryBoardSelectItemTo(e.Marker.Time + new TimeSpan(1));
+        }
+
+        private void PreviewVideo_RateChanged(object sender, RateChangedRoutedEventArgs e)
+        {
+            //App.VideoManager.SetStoryBoardSelectItemTo(previewVideo.Position);
         }
 
         private void PreviewVideo_SeekCompleted(object sender, RoutedEventArgs e)

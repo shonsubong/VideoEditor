@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Editing;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace UWPDemo.Models
@@ -13,6 +14,7 @@ namespace UWPDemo.Models
     /// </summary>
     public class Clip : Media
     {
+        
         public Clip(MediaClip mediaClip) : base(mediaClip)
         {
         }

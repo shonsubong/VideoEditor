@@ -16,6 +16,7 @@ using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace UWPDemo.ViewModels
 {
@@ -61,7 +62,7 @@ namespace UWPDemo.ViewModels
             previewVideo.AutoPlay = false;
             previewVideo.AreTransportControlsEnabled = true;
 
-            
+
             storyBoard = new StoryBoard();
             storyBoard.StoryBoardClipsUpdated += storyBoard_StoryBoardClipsUpdated;
 
@@ -95,23 +96,38 @@ namespace UWPDemo.ViewModels
         public void RefreshPreviewVideo()
         {
             storyBoard.AppendAllClips();
+            UpdateTimelineMarkerCollection();
 
             previewVideo.Position = TimeSpan.Zero;
-            mediaStreamSource = composition.GeneratePreviewMediaStreamSource(0,0);
+            mediaStreamSource = composition.GeneratePreviewMediaStreamSource(0, 0);
             if (mediaStreamSource != null)
+            {
                 previewVideo.SetMediaStreamSource(mediaStreamSource);
+            }
+        }
+
+        private void UpdateTimelineMarkerCollection()
+        {
+            previewVideo.Markers.Clear();
+            foreach (Clip clip in storyBoard.Clips)
+            {
+                TimelineMarker marker = new TimelineMarker();
+                marker.Time = clip.MediaClip.StartTimeInComposition;
+                marker.Text = "marker";
+                previewVideo.Markers.Add(marker);
+            }
         }
 
         public void SetPreviewVideoPositionTo(Clip clip)
         {
-            previewVideo.Position = new TimeSpan(clip.MediaClip.StartTimeInComposition.Ticks+1);
+            previewVideo.Position = new TimeSpan(clip.MediaClip.StartTimeInComposition.Ticks + 1);
         }
 
         public void SetStoryBoardSelectItemTo(TimeSpan position)
         {
-            foreach(Clip clip in storyBoard.Clips)
+            foreach (Clip clip in storyBoard.Clips)
             {
-                if(position > clip.MediaClip.StartTimeInComposition && position <= clip.MediaClip.EndTimeInComposition)
+                if (position > clip.MediaClip.StartTimeInComposition && position <= clip.MediaClip.EndTimeInComposition)
                 {
                     rootPage.CurStoryBoardView.CurStoryList.SelectedItem = clip;
                     return;
@@ -128,9 +144,9 @@ namespace UWPDemo.ViewModels
                 picker.FileTypeChoices.Add("MP4 files", new List<string>() { ".mp4" });
                 picker.SuggestedFileName = "TrimmedClip.mp4";
 
-                
+
                 StorageFile file = await picker.PickSaveFileAsync();
-                                
+
                 if (file != null && composition != null)
                 {
                     var saveOperation = composition.RenderToFileAsync(file, MediaTrimmingPreference.Precise);
@@ -168,15 +184,15 @@ namespace UWPDemo.ViewModels
                 else
                 {
                     rootPage.NotifyUser("User cancelled the file selection", NotifyType.StatusMessage);
-                    
+
                     //EnableButtons(true);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
-            
+
         }
 
         public void SplitVideoFile(Media media)
@@ -185,7 +201,7 @@ namespace UWPDemo.ViewModels
             {
                 storyBoard.Clear();
 
-                double step = 1.5;
+                double step = 1.0;
 
                 storyBoard.AddandTrimSecClip(media, 0, 1 * step);
 
@@ -201,7 +217,7 @@ namespace UWPDemo.ViewModels
             }
             catch (Exception e)
             {
-                
+
             }
         }
 
@@ -215,6 +231,6 @@ namespace UWPDemo.ViewModels
 
         }
 
-        
+
     }
 }

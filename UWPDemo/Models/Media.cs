@@ -64,6 +64,19 @@ namespace UWPDemo.Models
             }
         }
 
+        private TimelineMarker marker;
+        public TimelineMarker Marker
+        {
+            get { return marker; }
+            set
+            {
+                marker = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         public object Clone()
         {
             Media clone = new Media(MediaClip.Clone());
@@ -81,16 +94,14 @@ namespace UWPDemo.Models
         public void Trim(long startTick, long endTick)
         {
             mediaClip.TrimTimeFromStart = new TimeSpan(startTick);
-            long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick;
+            long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick + 1;
             mediaClip.TrimTimeFromEnd = new TimeSpan(trimTickFromEnd);
             //UpdateBitmapThumbnail();
         }
 
         public void Trim(double startSec, double endSec)
         {
-            mediaClip.TrimTimeFromStart = TimeSpan.FromSeconds(startSec);
-            double trimSecondFromEnd = mediaClip.OriginalDuration.TotalSeconds - endSec;
-            mediaClip.TrimTimeFromEnd = TimeSpan.FromSeconds(trimSecondFromEnd);
+            Trim(TimeSpan.FromSeconds(startSec).Ticks, TimeSpan.FromSeconds(endSec).Ticks);
         }
     }
 }

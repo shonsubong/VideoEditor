@@ -9,6 +9,7 @@ using UWPDemo.Models;
 using UWPDemo.Util;
 using Windows.Media.Editing;
 using Windows.Storage;
+using Windows.UI.Xaml.Media;
 
 namespace UWPDemo.VideoManager
 {
@@ -17,6 +18,7 @@ namespace UWPDemo.VideoManager
         public ObservableCollection<Clip> Clips { get; private set; }
 
         public MediaComposition Composition { get; private set; }
+
 
         public EventHandler StoryBoardClipsUpdated;
 
@@ -42,16 +44,16 @@ namespace UWPDemo.VideoManager
         public async void AddandTrimTickClip(StorageFile file, long startTick, long endTick)
         {
             Clip clip = new Clip(await MediaClip.CreateFromFileAsync(file));
-            Clips.Add(clip);
             clip.Trim(startTick, endTick);
+            Clips.Add(clip);
             clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync();
         }
 
         public async void AddandTrimSecClip(Media media, double startSec, double endSec)
         {
             Clip clip = new Clip(media.MediaClip.Clone());
-            Clips.Add(clip);
             clip.Trim(startSec, endSec);
+            Clips.Add(clip);            
             clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync();
         }
 
