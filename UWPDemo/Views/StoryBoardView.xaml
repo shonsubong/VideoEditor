@@ -10,41 +10,71 @@
     mc:Ignorable="d"
     Height="300"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <ResourceDictionary Source="../PageResources.xaml" />
+    </Page.Resources>
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto">
-            <GridView x:Name="StoryList" SelectionMode="Extended" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
-                      AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
-                      DragItemsStarting="StoryList_DragItemsStarting"
-                      SelectionChanged="StoryList_SelectionChanged"
-                      DragEnter="StoryList_DragEnter"
-                      DragItemsCompleted="StoryList_DragItemsCompleted"
-                      Drop="StoryList_Drop"
-                      ItemsSource="{Binding StoryBord.Clips}">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="44" />
-                            </Grid.RowDefinitions>
-                            <Border  Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
-                                <Image  Source="{Binding Thumbnail, Mode=OneWay}"  />
-                            </Border>
-                            <TextBlock Grid.Row="1" Text="{Binding Name,Mode=TwoWay}" FontSize="13" TextTrimming="Clip" TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
+        
+        <GridView x:Name="StoryList" SelectionMode="Extended" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                  AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
+                  DragItemsStarting="StoryList_DragItemsStarting"
+                  SelectionChanged="StoryList_SelectionChanged"
+                  DragEnter="StoryList_DragEnter"
+                  DragItemsCompleted="StoryList_DragItemsCompleted"
+                  Drop="StoryList_Drop"
+                  ItemsSource="{Binding StoryBord.Clips}" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.HorizontalScrollMode="Enabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollMode="Disabled"
+                  Height="230" VerticalAlignment="Top" Margin="0,0">
+            
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:Name="ClipItem" PointerEntered="ClipItem_PointerEntered" PointerExited="ClipItem_PointerExited" RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <CompositeTransform x:Name="gridTransform" ScaleX="1" ScaleY="1"/>
+                        </Grid.RenderTransform>
+                        <Grid.Resources>
+                            <Storyboard x:Name="EnterStoryboard">
+                                <FadeInThemeAnimation Storyboard.TargetName="DeleteClipButton"/>
+                                <!--<DoubleAnimation Storyboard.TargetName="gridTransform" From="1" To="1.05" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleX"/>
+                                <DoubleAnimation Storyboard.TargetName="gridTransform" From="1" To="1.05" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleY"/>-->
+                            </Storyboard>
+                            <Storyboard x:Name="ExitStoryboard">
+                                <FadeOutThemeAnimation Storyboard.TargetName="DeleteClipButton" />
+                                <!--<DoubleAnimation Storyboard.TargetName="gridTransform" From="1.05" To="1" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleX"/>
+                                <DoubleAnimation Storyboard.TargetName="gridTransform" From="1.05" To="1" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleY"/>-->
+                            </Storyboard>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
+                            <Image  Source="{Binding Thumbnail, Mode=OneWay}" Stretch="UniformToFill" HorizontalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Grid.Row="0" Text="{Binding DurationSec, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0.0} sec'}" FontWeight="Bold" FontSize="15" TextTrimming="Clip" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Row="1" Text="{Binding Subtitle, Mode=TwoWay}" VerticalAlignment="Bottom" Background="Wheat" Foreground="Black" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <Button x:Name="DeleteClipButton" Content="X" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="DeleteClipButton_Tapped"/>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
 
-                <GridView.ItemContainerStyle>
-                    <Style TargetType="GridViewItem">
-                        <Setter Property="Margin" Value="3"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="Width" Value="200"/>
-                        <Setter Property="Height" Value="280"/>
-                    </Style>
-                </GridView.ItemContainerStyle>
-            </GridView>
-        </ScrollViewer>
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="6"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Width" Value="120"/>
+                    <Setter Property="Height" Value="200"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+        </GridView>
+
     </Grid>
 </Page>

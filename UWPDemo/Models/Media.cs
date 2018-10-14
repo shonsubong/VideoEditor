@@ -53,6 +53,13 @@ namespace UWPDemo.Models
             }
         }
 
+        public double DurationSec
+        {
+            get { return mediaClip.TrimmedDuration.TotalSeconds; }           
+        }
+
+       
+
         private MediaClip mediaClip;
         public MediaClip MediaClip
         {
@@ -97,6 +104,7 @@ namespace UWPDemo.Models
             long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick + 1;
             mediaClip.TrimTimeFromEnd = new TimeSpan(trimTickFromEnd);
             //UpdateBitmapThumbnail();
+            RaisePropertyChanged("DurationSec");
         }
 
         public void Trim(double startSec, double endSec)

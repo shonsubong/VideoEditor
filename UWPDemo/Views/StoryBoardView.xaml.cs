@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // 빈 페이지 항목 템플릿에 대한 설명은 https://go.microsoft.com/fwlink/?LinkId=234238에 나와 있습니다.
@@ -68,6 +69,45 @@ namespace UWPDemo.Views
             {
                 App.VideoManager.SplitVideoFile(App.VideoManager.Drop);
             }
+        }
+
+        private void DeleteClipButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if(btn != null)
+            {
+                Clip clip = btn.DataContext as Clip;
+                if (clip != null)
+                {
+                    App.VideoManager.StoryBord.Remove(clip);
+                }
+            }
+        }
+
+        private void ClipItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            try
+            {                
+                Storyboard sb = ((Grid)sender).Resources["EnterStoryboard"] as Storyboard;
+                sb.Begin();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ClipItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            try
+            {
+                Storyboard sb = ((Grid)sender).Resources["ExitStoryboard"] as Storyboard;
+                sb.Begin();
+            }
+            catch
+            {
+
+            }            
         }
 
         

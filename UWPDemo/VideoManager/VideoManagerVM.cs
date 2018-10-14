@@ -117,22 +117,27 @@ namespace UWPDemo.ViewModels
                 previewVideo.Markers.Add(marker);
             }
         }
-
+        
         public void SetPreviewVideoPositionTo(Clip clip)
         {
-            previewVideo.Position = new TimeSpan(clip.MediaClip.StartTimeInComposition.Ticks + 1);
+            if(!ChangingSelectItem)
+                previewVideo.Position = new TimeSpan(clip.MediaClip.StartTimeInComposition.Ticks + 1);
         }
 
+        public bool ChangingSelectItem = false;
         public void SetStoryBoardSelectItemTo(TimeSpan position)
         {
+            ChangingSelectItem = true;
             foreach (Clip clip in storyBoard.Clips)
             {
                 if (position > clip.MediaClip.StartTimeInComposition && position <= clip.MediaClip.EndTimeInComposition)
                 {
                     rootPage.CurStoryBoardView.CurStoryList.SelectedItem = clip;
+                    ChangingSelectItem = false;
                     return;
                 }
             }
+            ChangingSelectItem = false;
         }
 
         public async Task ExportVideoFile()
@@ -201,7 +206,7 @@ namespace UWPDemo.ViewModels
             {
                 storyBoard.Clear();
 
-                double step = 1.0;
+                double step = 1.3;
 
                 storyBoard.AddandTrimSecClip(media, 0, 1 * step);
 
@@ -213,6 +218,7 @@ namespace UWPDemo.ViewModels
 
                 storyBoard.AddandTrimSecClip(media, 4 * step, 5 * step);
 
+                storyBoard.AddandTrimSecClip(media, 5 * step, 6 * step);
 
             }
             catch (Exception e)

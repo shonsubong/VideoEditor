@@ -47,7 +47,7 @@ namespace UWPDemo.Util
                     }
                     return bitmapImage;
                 }
-            }   
+            }
         }
     }
 }

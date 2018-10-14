@@ -14,9 +14,28 @@ namespace UWPDemo.Models
     /// </summary>
     public class Clip : Media
     {
-        
+
+        private string subtitle;
+        public string Subtitle
+        {
+            get { return subtitle; }
+            set
+            {
+                subtitle = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Clip(MediaClip mediaClip) : base(mediaClip)
         {
+        }
+
+        public static Clip CreateClip(MediaClip mediaClip, double start, double end, string subtitle)
+        {
+            Clip clip = new Clip(mediaClip.Clone());
+            clip.Trim(start, end);
+            clip.Subtitle = subtitle;
+            return clip;
         }
     }
 }

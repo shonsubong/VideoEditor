@@ -13,28 +13,24 @@
     SizeChanged="Page_SizeChanged">
 
     <Page.Resources>
-        <ResourceDictionary Source="MainPageResources.xaml" />
+        <ResourceDictionary Source="PageResources.xaml" />
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*" MinHeight="290"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="260"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Frame Grid.Row="0" Grid.Column="0">
-                <RelativePanel HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                        <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="5" />
-                    </StackPanel>
-                </RelativePanel>
-            </Frame>
+        <Grid Grid.Row="0" Margin="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="3" />
+                </StackPanel>
         </Grid>
 
-        <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="0" DisplayMode="Overlay" IsPaneOpen="False" >
+        <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="50" DisplayMode="Overlay" IsPaneOpen="False" >
 
             <SplitView.Content>
                 <views:VideoPreview  Grid.Row="1" Background="Transparent"/>
@@ -63,37 +59,13 @@
                              LargeChange="1"   StepFrequency="0.1"   IsThumbToolTipEnabled="True"
                              Value="{Binding Scale,Mode=TwoWay}"/>
             <Button  x:Name="SplitButton" HorizontalAlignment="Right" Style="{StaticResource NavigationBackButtonNormalStyle}" Tapped="SplitButton_Tapped">
-                <Button.Resources>
-                    <Storyboard  x:Name="SplitShow" >
-                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetName="SplitIcon"  Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0"/>
-                            <LinearDoubleKeyFrame Value="1.2" KeyTime="0:0:0.2"/>
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.3"/>
-                        </DoubleAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetName="SplitIcon"  Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0"/>
-                            <LinearDoubleKeyFrame Value="1.2" KeyTime="0:0:0.2"/>
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.3"/>
-                        </DoubleAnimationUsingKeyFrames>
-                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetName="SplitIcon"  Storyboard.TargetProperty="Opacity">
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0"/>
-                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.2"/>
-                            <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.31"/>
-                        </DoubleAnimationUsingKeyFrames>
-                    </Storyboard>
-                </Button.Resources>
                 <FontIcon  x:Name="SplitIcon" FontSize="18"  FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" RenderTransformOrigin="0.5,0.5">
                     <FontIcon.RenderTransform>
                         <CompositeTransform/>
                     </FontIcon.RenderTransform>
                 </FontIcon>
             </Button>
-
-
         </Grid>
-
-
-
 
         <Grid Grid.Row="3">
             <StackPanel Orientation="Vertical">

@@ -34,27 +34,23 @@ namespace UWPDemo.VideoManager
             StoryBoardClipsUpdated?.Invoke(this, null);
         }
 
-        public async void AddClip(StorageFile file)
-        {
-            Clip clip = new Clip(await MediaClip.CreateFromFileAsync(file));
-
-            Clips.Add(clip);
-        }
-
-        public async void AddandTrimTickClip(StorageFile file, long startTick, long endTick)
-        {
-            Clip clip = new Clip(await MediaClip.CreateFromFileAsync(file));
-            clip.Trim(startTick, endTick);
-            Clips.Add(clip);
-            clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync();
-        }
-
         public async void AddandTrimSecClip(Media media, double startSec, double endSec)
         {
-            Clip clip = new Clip(media.MediaClip.Clone());
-            clip.Trim(startSec, endSec);
-            Clips.Add(clip);            
-            clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync();
+            long start = TimeSpan.FromSeconds(startSec).Ticks;
+            long end = TimeSpan.FromSeconds(endSec).Ticks;
+            long duration = media.MediaClip.OriginalDuration.Ticks;
+
+            if (start < end && duration > end)
+            {
+                Clip clip = Clip.CreateClip(media.MediaClip, startSec, endSec, "merong");
+                Clips.Add(clip);
+                clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
+            }
+        }
+
+        public void Remove(Clip clip)
+        {
+            Clips.Remove(clip);
         }
 
         public void Clear()

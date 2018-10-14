@@ -88,17 +88,25 @@ namespace UWPDemo
 
         private void videoClipsShowButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            VideoSplitView.IsPaneOpen = !VideoSplitView.IsPaneOpen;
+            //VideoSplitView.IsPaneOpen = !VideoSplitView.IsPaneOpen;
 
-            if(VideoSplitView.IsPaneOpen)
+            if(!VideoSplitView.IsPaneOpen)
             {
+                VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
                 VideoLibraryTitle.Visibility = Visibility.Visible;
                 VideoLibraryView.Visibility = Visibility.Visible;
+                videoClipsShowButton.HorizontalAlignment = HorizontalAlignment.Left;
+                VideoSplitView.IsPaneOpen = true;
+                VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
             }
             else
             {
-                VideoLibraryTitle.Visibility = Visibility.Collapsed;
-                VideoLibraryView.Visibility = Visibility.Collapsed;
+                VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                //VideoLibraryTitle.Visibility = Visibility.Collapsed;
+                //VideoLibraryView.Visibility = Visibility.Collapsed;
+                videoClipsShowButton.HorizontalAlignment = HorizontalAlignment.Right;
+                VideoSplitView.IsPaneOpen = false;
+                VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
             }
                 
         }
@@ -151,7 +159,8 @@ namespace UWPDemo
 
         private void SplitButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
+            VideoSplitView.IsPaneOpen = true;
         }
+             
     }
 }
