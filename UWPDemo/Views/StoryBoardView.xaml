@@ -14,10 +14,12 @@
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto">
             <GridView x:Name="StoryList" SelectionMode="Extended" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
-                        AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
-                        DragItemsStarting="StoryList_DragItemsStarting"
-                        SelectionChanged="StoryList_SelectionChanged"
-                        ItemsSource="{Binding VideoManger.StoryBord.Clips}">
+                      AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
+                      DragItemsStarting="StoryList_DragItemsStarting"
+                      SelectionChanged="StoryList_SelectionChanged"
+                      DragEnter="StoryList_DragEnter"
+                      Drop="StoryList_Drop"
+                      ItemsSource="{Binding StoryBord.Clips}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid >
@@ -26,7 +28,7 @@
                                 <RowDefinition Height="44" />
                             </Grid.RowDefinitions>
                             <Border  Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
-                                <Image  Source="{Binding ImgSource, Mode=OneWay}"  />
+                                <Image  Source="{Binding Thumbnail, Mode=OneWay}"  />
                             </Border>
                             <TextBlock Grid.Row="1" Text="{Binding Name,Mode=TwoWay}" FontSize="13" TextTrimming="Clip" TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>

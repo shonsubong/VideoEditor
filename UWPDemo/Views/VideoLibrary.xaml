@@ -9,15 +9,43 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel Orientation="Vertical">            
-            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <RelativePanel HorizontalAlignment="Stretch">
-                    <Button x:Name="addFile" Content="+ 비디오 추가" Command="{Binding AddVideoCommand}" Margin="5" />
-                    <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                    </StackPanel>                    
-                </RelativePanel>
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="AddMediaFileButton" Content="+ 비디오 추가" Tapped="AddMediaFileButton_Tapped" Command="{Binding AddMediaCommand}" Margin="5" />
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <GridView x:Name="MediaList" Grid.Row="1" SelectionMode="Extended"  Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" 
+                                ItemsSource="{Binding MediaClipList}"
+                                      AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
+                                      DragItemsStarting="MediaList_DragItemsStarting" 
+                                      SelectionChanged="MediaList_SelectionChanged">
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="44" />
+                                    </Grid.RowDefinitions>
+                                    <Border  Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
+                                        <Image  Source="{Binding Thumbnail, Mode=OneWay}"  />
+                                    </Border>
+                                    <TextBlock Grid.Row="1" Text="{Binding Name, Mode=TwoWay}" FontSize="13" TextTrimming="Clip" TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Margin" Value="3"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Setter Property="Height" Value="100"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
+                    </GridView>
+
+                    <TextBlock x:Name="RightText" VerticalAlignment="Bottom" TextWrapping="Wrap"/>
+                </Grid>
             </ScrollViewer>
-            
         </StackPanel>
     </Grid>
 </Page>

@@ -31,17 +31,15 @@ namespace UWPDemo.Views
     /// </summary>
     public sealed partial class VideoPreview : Page
     {
-        
-        private MainPage rootPage;
-        private MediaComposition composition;
-        private StorageFile pickedFile;
-        private MediaStreamSource mediaStreamSource;
-        private StorageItemAccessList storageItemAccessList;
-
-        public VideoPreview()
+         public VideoPreview()
         {
             this.InitializeComponent();
-            this.DataContext = ViewModelDispatcher.VideoPreviewViewModel;
+            this.DataContext = App.VideoManager;
+        }       
+
+        private void VideoRefreshButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            App.VideoManager.RefreshPreviewVideo();
         }
     }
 }

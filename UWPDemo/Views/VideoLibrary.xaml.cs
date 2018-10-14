@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPDemo.Models;
+using UWPDemo.Util;
 using UWPDemo.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Editing;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,7 +33,52 @@ namespace UWPDemo.Views
         public VideoLibrary()
         {
             this.InitializeComponent();
-            this.DataContext = ViewModelDispatcher.VideoLIbraryViewModel;
+            this.DataContext = App.VideoManager;
         }
+
+        private void MediaList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+            App.VideoManager.Drop = e.Items.First() as Media;
+        }
+
+        private void MediaList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Media m = MediaList.SelectedItem as Media;
+        }
+
+        private async void AddMediaFileButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FileOpenPicker filePicker = new FileOpenPicker();
+            filePicker.SuggestedStartLocation = PickerLocationId.VideosLibrary;
+            filePicker.FileTypeFilter.Add(".mp4");
+            filePicker.FileTypeFilter.Add(".m4v");
+            filePicker.FileTypeFilter.Add(".mov");
+            filePicker.FileTypeFilter.Add(".asf");
+            filePicker.FileTypeFilter.Add(".avi");
+            filePicker.FileTypeFilter.Add(".wmv");
+            filePicker.ViewMode = PickerViewMode.Thumbnail;
+
+            StorageFile file = await filePicker.PickSingleFileAsync();
+
+            if (file != null)
+            {
+                try
+                {
+                    StorageItemAccessList storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
+                    storageItemAccessList.Add(file);
+
+                    Media media = new Media(await MediaClip.CreateFromFileAsync(file));
+                    media.Thumbnail = await file.GetThumbnailBitmapAsync();
+                    media.Name = file.Name;
+
+                    App.VideoManager.MediaClipList.Add(media);
+                }
+                catch (Exception)
+                {
+                    App.Tip("file err");
+                }
+            }
+        }
+
     }
 }

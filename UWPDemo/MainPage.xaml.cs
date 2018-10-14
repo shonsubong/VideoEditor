@@ -31,7 +31,6 @@ namespace UWPDemo
 
             Current = this;
         }
-
       
         public void NotifyUser(string strMessage, NotifyType type)
         {
@@ -107,10 +106,8 @@ namespace UWPDemo
         private enum WidthEnum
         {
             Initialize,
-
             PhoneNarrow,
             PhoneStrath,
-
             Pad,
             Pc
         }
@@ -126,7 +123,6 @@ namespace UWPDemo
 
             if (nwe != owe)
             {
-
                 if (nwe == WidthEnum.PhoneNarrow || nwe == WidthEnum.PhoneStrath)
                 {
                     VideoSplitView.DisplayMode = SplitViewDisplayMode.Overlay;

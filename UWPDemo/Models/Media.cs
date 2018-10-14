@@ -13,10 +13,11 @@ namespace UWPDemo.Models
     /// <summary>
     /// 파일로 부터 읽은 오리지널 Media 파일
     /// </summary>
-    public class Media : ViewModelBase
+    public class Media : ViewModelBase, ICloneable
     {
-        public Media()
+        public Media(MediaClip mediaClip)
         {
+            this.MediaClip = mediaClip;
         }
 
         private string name;
@@ -30,13 +31,13 @@ namespace UWPDemo.Models
             }
         }
 
-        private BitmapImage bitmap;
-        public BitmapImage Bitmap
+        private BitmapImage thumbnail;
+        public BitmapImage Thumbnail
         {
-            get { return bitmap; }
+            get { return thumbnail; }
             set
             {
-                bitmap = value;
+                thumbnail = value;
                 RaisePropertyChanged();
             }
         }
@@ -52,15 +53,44 @@ namespace UWPDemo.Models
             }
         }
 
-        private MediaClip clip;
-        public MediaClip Clip
+        private MediaClip mediaClip;
+        public MediaClip MediaClip
         {
-            get { return clip; }
+            get { return mediaClip; }
             set
             {
-                clip = value;
+                mediaClip = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public object Clone()
+        {
+            Media clone = new Media(MediaClip.Clone());
+            clone.Brush = Brush;
+            clone.Thumbnail = Thumbnail;
+            clone.Name = Name;
+            return clone;            
+        }
+
+        public void ClearTrim()
+        {
+            Trim(0, mediaClip.OriginalDuration.Ticks);
+        }
+
+        public void Trim(long startTick, long endTick)
+        {
+            mediaClip.TrimTimeFromStart = new TimeSpan(startTick);
+            long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick;
+            mediaClip.TrimTimeFromEnd = new TimeSpan(trimTickFromEnd);
+            //UpdateBitmapThumbnail();
+        }
+
+        public void Trim(double startSec, double endSec)
+        {
+            mediaClip.TrimTimeFromStart = TimeSpan.FromSeconds(startSec);
+            double trimSecondFromEnd = mediaClip.OriginalDuration.TotalSeconds - endSec;
+            mediaClip.TrimTimeFromEnd = TimeSpan.FromSeconds(trimSecondFromEnd);
         }
     }
 }

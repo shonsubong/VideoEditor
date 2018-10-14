@@ -34,7 +34,13 @@
             </Frame>
         </Grid>
 
-        <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="400" CompactPaneLength="0" DisplayMode="Overlay" IsPaneOpen="False" >
+        <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="0" DisplayMode="Overlay" IsPaneOpen="False" >
+
+            <SplitView.Content>
+                <!--<MediaPlayerElement x:Name="MediaPlayerElement" Grid.Row="1" AutoPlay="True"  Source="d:\TrimmedClip.mp4"/>-->
+                <views:VideoPreview Grid.Row="1" Background="Transparent"/>
+            </SplitView.Content>
+            
             <SplitView.Pane >
                 <StackPanel Orientation="Vertical">
                     <Grid HorizontalAlignment="Stretch">                        
@@ -43,14 +49,11 @@
                                 Style="{StaticResource NavigationBackButtonNormalStyle}"
                                 HorizontalAlignment="Left" Tapped="videoClipsShowButton_Tapped" Padding="0,0,0,0" FontSize="22"/>
                     </Grid>
-                    <views:VideoLibrary x:Name="VideoLibraryView" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    <views:VideoLibrary x:Name="VideoLibraryView" />
                 </StackPanel>
             </SplitView.Pane>
 
-            <SplitView.Content>
-                <!--<MediaPlayerElement x:Name="MediaPlayerElement" Grid.Row="1" AutoPlay="True"  Source="d:\TrimmedClip.mp4"/>-->
-                <views:VideoPreview Grid.Row="1" Background="Transparent"/>
-            </SplitView.Content>
+            
         </SplitView>
 
         <Grid Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#060606" Background="#44bbbbbb">

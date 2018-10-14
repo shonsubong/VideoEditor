@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPDemo.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -22,6 +23,16 @@ namespace UWPDemo
     /// </summary>
     sealed partial class App : Application
     {
+        public static VideoManagerVM VideoManager = new VideoManagerVM();
+
+        public async static void Tip(string s)
+        {
+            //App.Model.Tip = s;
+            //App.Model.TipVisibility = Visibility.Visible;
+            //await Task.Delay(1000);
+            //App.Model.TipVisibility = Visibility.Collapsed;
+        }
+                
         /// <summary>
         /// Singleton 응용 프로그램 개체를 초기화합니다. 이것은 실행되는 작성 코드의 첫 번째
         /// 줄이며 따라서 main() 또는 WinMain()과 논리적으로 동일합니다.

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UWPDemo.Models;
 using UWPDemo.Util;
 using UWPDemo.VideoManager;
 using Windows.Foundation;
@@ -23,11 +24,15 @@ namespace UWPDemo.ViewModels
         private MainPage rootPage { get { return MainPage.Current; } }
         private StorageItemAccessList storageItemAccessList;
         private StorageFile pickedFile;
-        
+
         private MediaStreamSource mediaStreamSource;
         private MediaElement previewVideo;
         private StoryBoard storyBoard;
         private MediaComposition composition { get { return storyBoard.Composition; } }
+
+        public Media Drop = null;
+
+        public ObservableCollection<Media> MediaClipList { get; private set; }
 
         public MediaElement PreviewVideo
         {
@@ -62,6 +67,7 @@ namespace UWPDemo.ViewModels
             storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
             storageItemAccessList.Clear();
 
+            MediaClipList = new ObservableCollection<Media>();
         }
 
         public async Task ImportVideoFileAsync()
@@ -77,18 +83,12 @@ namespace UWPDemo.ViewModels
             }
             storageItemAccessList.Add(pickedFile);
 
-            SplitVideoFile();
+            //SplitVideoFile();
         }
 
         private void storyBoard_StoryBoardClipsUpdated(object sender, EventArgs e)
         {
-            RefreshStoryBoard();
-            //RefreshPreviewVideo();
-        }
-
-        public void RefreshStoryBoard()
-        {
-            storyBoard.RefreshAllThumbnails();
+            RefreshPreviewVideo();
         }
 
         public void RefreshPreviewVideo()
@@ -96,9 +96,8 @@ namespace UWPDemo.ViewModels
             storyBoard.AppendAllClips();
 
             previewVideo.Position = TimeSpan.Zero;
-
-            mediaStreamSource = composition.GeneratePreviewMediaStreamSource((int)previewVideo.ActualWidth, (int)previewVideo.ActualHeight);
-            if(mediaStreamSource != null)
+            mediaStreamSource = composition.GeneratePreviewMediaStreamSource(0,0);
+            if (mediaStreamSource != null)
                 previewVideo.SetMediaStreamSource(mediaStreamSource);
       
             //previewVideo.SetSource(await pickedFile.OpenReadAsync(), pickedFile.ContentType);
@@ -163,21 +162,21 @@ namespace UWPDemo.ViewModels
             
         }
 
-        public void SplitVideoFile()
+        public void SplitVideoFile(Media media)
         {
             try
             {
                 storyBoard.Clear();
 
-                storyBoard.AddandTrimSecClip(pickedFile, 0, 1);
+                storyBoard.AddandTrimSecClip(media, 0, 1);
 
-                storyBoard.AddandTrimSecClip(pickedFile, 1, 2);
+                storyBoard.AddandTrimSecClip(media, 1, 2);
 
-                storyBoard.AddandTrimSecClip(pickedFile, 2, 3);
+                storyBoard.AddandTrimSecClip(media, 2, 3);
 
-                storyBoard.AddandTrimSecClip(pickedFile, 3, 4);
+                storyBoard.AddandTrimSecClip(media, 3, 4);
 
-                storyBoard.AddandTrimSecClip(pickedFile, 4, 5);
+                storyBoard.AddandTrimSecClip(media, 4, 5);
 
 
             }

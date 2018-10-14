@@ -105,14 +105,10 @@
     <Compile Include="Util\EnumTypes.cs" />
     <Compile Include="Models\Clip.cs" />
     <Compile Include="Models\Media.cs" />
+    <Compile Include="Util\HelperMediaFunction.cs" />
     <Compile Include="VideoManager\StoryBoard.cs" />
-    <Compile Include="VideoManager\VideoClip.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="VideoManager\VideoManagerVM.cs" />
-    <Compile Include="ViewModels\VideoPreviewViewModel.cs" />
-    <Compile Include="ViewModels\VideoLibraryViewModel.cs" />
-    <Compile Include="ViewModels\StoryBoardViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelDispatcher.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\StoryBoardView.xaml.cs">
       <DependentUpon>StoryBoardView.xaml</DependentUpon>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UWPDemo.ViewModels;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,8 +27,7 @@ namespace UWPDemo.Views
         public StoryBoardView()
         {
             this.InitializeComponent();
-
-            this.DataContext = ViewModelDispatcher.StoryBoardViewModel;
+            this.DataContext = App.VideoManager;
         }
 
         private void StoryList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
@@ -38,6 +38,24 @@ namespace UWPDemo.Views
         private void StoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void StoryList_DragEnter(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = DataPackageOperation.Copy;
+            e.DragUIOverride.IsGlyphVisible = false;
+            e.DragUIOverride.Caption = "Add";
+        }
+
+        private void StoryList_Drop(object sender, DragEventArgs e)
+        {
+            DragOperationDeferral def = e.GetDeferral();
+            def.Complete();
+
+            if (App.VideoManager.Drop.MediaClip != null)
+            {
+                App.VideoManager.SplitVideoFile(App.VideoManager.Drop);
+            }
         }
     }
 }
