@@ -18,6 +18,7 @@
                       DragItemsStarting="StoryList_DragItemsStarting"
                       SelectionChanged="StoryList_SelectionChanged"
                       DragEnter="StoryList_DragEnter"
+                      DragItemsCompleted="StoryList_DragItemsCompleted"
                       Drop="StoryList_Drop"
                       ItemsSource="{Binding StoryBord.Clips}">
                 <GridView.ItemTemplate>

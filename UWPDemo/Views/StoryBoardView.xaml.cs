@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPDemo.Models;
 using UWPDemo.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
@@ -40,6 +41,11 @@ namespace UWPDemo.Views
 
         }
 
+        private void StoryList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        {
+            StoryList.SelectedItem = args.Items.First() as Clip;
+        }
+
         private void StoryList_DragEnter(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy;
@@ -57,5 +63,7 @@ namespace UWPDemo.Views
                 App.VideoManager.SplitVideoFile(App.VideoManager.Drop);
             }
         }
+
+        
     }
 }
