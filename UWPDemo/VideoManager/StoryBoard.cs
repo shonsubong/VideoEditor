@@ -34,6 +34,13 @@ namespace UWPDemo.VideoManager
             StoryBoardClipsUpdated?.Invoke(this, null);
         }
 
+        public async void AddClip(Media media)
+        {
+            Clip clip = Clip.CreateClip(media.MediaClip);
+            Clips.Add(clip);
+            clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);        
+        }
+
         public async void AddandTrimSecClip(Media media, double startSec, double endSec)
         {
             long start = TimeSpan.FromSeconds(startSec).Ticks;

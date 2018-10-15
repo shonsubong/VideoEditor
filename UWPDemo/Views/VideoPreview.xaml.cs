@@ -31,16 +31,17 @@ namespace UWPDemo.Views
     /// </summary>
     public sealed partial class VideoPreview : Page
     {
-        private MediaElement previewVideo;
+        public MediaElement PreviewVideo { get { return mediaElement; } }
 
         public VideoPreview()
         {
             this.InitializeComponent();
             this.DataContext = App.VideoManager;
-            this.previewVideo = App.VideoManager.PreviewVideo;
-            this.previewVideo.SeekCompleted += PreviewVideo_SeekCompleted;
-            this.previewVideo.RateChanged += PreviewVideo_RateChanged;
-            this.previewVideo.MarkerReached += PreviewVideo_MarkerReached;
+            this.PreviewVideo.AutoPlay = false;
+            this.PreviewVideo.AreTransportControlsEnabled = true;
+            this.PreviewVideo.SeekCompleted += PreviewVideo_SeekCompleted;
+            this.PreviewVideo.RateChanged += PreviewVideo_RateChanged;
+            this.PreviewVideo.MarkerReached += PreviewVideo_MarkerReached;
             //this.previewVideo.TransportControls
         }
 
@@ -56,7 +57,7 @@ namespace UWPDemo.Views
 
         private void PreviewVideo_SeekCompleted(object sender, RoutedEventArgs e)
         {
-            App.VideoManager.SetStoryBoardSelectItemTo(previewVideo.Position);
+            App.VideoManager.SetStoryBoardSelectItemTo(PreviewVideo.Position);
         }
     
         private void VideoRefreshButton_Tapped(object sender, TappedRoutedEventArgs e)

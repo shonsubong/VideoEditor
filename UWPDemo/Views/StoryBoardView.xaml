@@ -13,7 +13,9 @@
     <Page.Resources>
         <ResourceDictionary Source="../PageResources.xaml" />
     </Page.Resources>
+
     <Grid>
+        
         
         <GridView x:Name="StoryList" SelectionMode="Extended" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                   AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
@@ -27,18 +29,19 @@
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollMode="Disabled"
-                  Height="230" VerticalAlignment="Top" Margin="0,0">
+                  Height="230" VerticalAlignment="Top" Padding="20,0" Margin="10,0"
+                  ItemContainerStyle="{StaticResource GridViewItemExpanded}">
             
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid Orientation="Vertical" />
+                    <ItemsWrapGrid Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Grid x:Name="ClipItem" PointerEntered="ClipItem_PointerEntered" PointerExited="ClipItem_PointerExited" RenderTransformOrigin="0.5,0.5">
                         <Grid.RenderTransform>
-                            <CompositeTransform x:Name="gridTransform" ScaleX="1" ScaleY="1"/>
+                            <ScaleTransform  x:Name="gridTransform" ScaleX="1" ScaleY="1"/>
                         </Grid.RenderTransform>
                         <Grid.Resources>
                             <Storyboard x:Name="EnterStoryboard">
@@ -59,22 +62,24 @@
                         <Border Grid.Row="0" Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
                             <Image  Source="{Binding Thumbnail, Mode=OneWay}" Stretch="UniformToFill" HorizontalAlignment="Center"/>
                         </Border>
-                        <TextBlock Grid.Row="0" Text="{Binding DurationSec, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0.0} sec'}" FontWeight="Bold" FontSize="15" TextTrimming="Clip" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <StackPanel Grid.Row="0" Visibility="Collapsed">
+                            <TextBlock Grid.Row="0" Text="{Binding TrimStart, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black"  FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Row="0" Text="{Binding TrimEnd, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Row="0" Text="{Binding TrimDuration, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="0" Text="{Binding DurationSec, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0.0} sec'}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         <TextBox Grid.Row="1" Text="{Binding Subtitle, Mode=TwoWay}" VerticalAlignment="Bottom" Background="Wheat" Foreground="Black" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                         <Button x:Name="DeleteClipButton" Content="X" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="DeleteClipButton_Tapped"/>
                     </Grid>
                 </DataTemplate>
-            </GridView.ItemTemplate>
-
-            <GridView.ItemContainerStyle>
-                <Style TargetType="GridViewItem">
-                    <Setter Property="Margin" Value="6"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Width" Value="120"/>
-                    <Setter Property="Height" Value="200"/>
-                </Style>
-            </GridView.ItemContainerStyle>
+            </GridView.ItemTemplate>            
         </GridView>
+
+        <Button Visibility="Collapsed" x:Name="LeftScroll" Width="40" Height="40" VerticalAlignment="Top" Margin="0,65,0,0" HorizontalAlignment="Left" PointerEntered="LeftScroll_PointerPressed" Tapped="LeftScroll_Tapped" />
+
+        <Button Visibility="Collapsed" x:Name="RightScroll" Width="40" Height="40" VerticalAlignment="Top" Margin="0,65,0,0" HorizontalAlignment="Right" Tapped="RightScroll_Tapped" />
+
+
 
     </Grid>
 </Page>

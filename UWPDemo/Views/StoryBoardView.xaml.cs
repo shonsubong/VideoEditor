@@ -32,6 +32,7 @@ namespace UWPDemo.Views
         {
             this.InitializeComponent();
             this.DataContext = App.VideoManager;
+            StoryList.ShowsScrollingPlaceholders = true;
         }
 
         private void StoryList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
@@ -45,6 +46,7 @@ namespace UWPDemo.Views
             if(clip != null)
             {
                 App.VideoManager.SetPreviewVideoPositionTo(clip);
+                StoryList.ScrollIntoView(StoryList.SelectedItem);
             }
         }
 
@@ -108,6 +110,48 @@ namespace UWPDemo.Views
             {
 
             }            
+        }
+
+        private void LeftScroll_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ScrollViewer scrollViewer = GetScrollViewer(StoryList);
+            scrollViewer.ChangeView(scrollViewer.HorizontalOffset + (-100 * 2), scrollViewer.VerticalOffset, null, false);
+        }
+
+        private void LeftScroll_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            ScrollViewer scrollViewer = GetScrollViewer(StoryList);
+            scrollViewer.ChangeView(scrollViewer.HorizontalOffset + (-100 * 2), scrollViewer.VerticalOffset, null, false);
+        }
+
+        private void RightScroll_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ScrollViewer scrollViewer = GetScrollViewer(StoryList);
+            scrollViewer.ChangeView(scrollViewer.HorizontalOffset + (100 * 2), scrollViewer.VerticalOffset, null, false);
+        }
+
+        public ScrollViewer GetScrollViewer(DependencyObject element)
+        {
+            if (element is ScrollViewer)
+            {
+                return (ScrollViewer)element;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i);
+
+                var result = GetScrollViewer(child);
+                if (result == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            return null;
         }
 
         

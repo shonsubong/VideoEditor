@@ -23,28 +23,20 @@ namespace UWPDemo.ViewModels
     public class VideoManagerVM : ViewModelBase
     {
         private MainPage rootPage { get { return MainPage.Current; } }
+        
         private StorageItemAccessList storageItemAccessList;
         private StorageFile pickedFile;
-
-        public MediaElement previewVideo;
         private MediaStreamSource mediaStreamSource;
         private StoryBoard storyBoard;
+
+        private MediaElement previewVideo { get { return rootPage.CurVideoPreview.PreviewVideo; } }
         private MediaComposition composition { get { return storyBoard.Composition; } }
 
         public Media Drop = null;
 
         public ObservableCollection<Media> MediaClipList { get; private set; }
 
-        public MediaElement PreviewVideo
-        {
-            get { return previewVideo; }
-            set
-            {
-                previewVideo = value;
-                RaisePropertyChanged();
-            }
-        }
-
+       
         public StoryBoard StoryBord
         {
             get { return storyBoard; }
@@ -58,11 +50,6 @@ namespace UWPDemo.ViewModels
 
         public VideoManagerVM()
         {
-            previewVideo = new MediaElement();
-            previewVideo.AutoPlay = false;
-            previewVideo.AreTransportControlsEnabled = true;
-
-
             storyBoard = new StoryBoard();
             storyBoard.StoryBoardClipsUpdated += storyBoard_StoryBoardClipsUpdated;
 
@@ -99,7 +86,7 @@ namespace UWPDemo.ViewModels
             UpdateTimelineMarkerCollection();
 
             previewVideo.Position = TimeSpan.Zero;
-            mediaStreamSource = composition.GeneratePreviewMediaStreamSource(0, 0);
+            mediaStreamSource = composition.GeneratePreviewMediaStreamSource((int)previewVideo.ActualWidth, (int)previewVideo.ActualHeight);
             if (mediaStreamSource != null)
             {
                 previewVideo.SetMediaStreamSource(mediaStreamSource);
@@ -204,11 +191,13 @@ namespace UWPDemo.ViewModels
         {
             try
             {
-                storyBoard.Clear();
+                //storyBoard.Clear();
 
-                double step = 1.3;
+                double step = 1.2;
 
-                storyBoard.AddandTrimSecClip(media, 0, 1 * step);
+                //storyBoard.AddClip(media);
+
+                storyBoard.AddandTrimSecClip(media, 0 * step, 1 * step);
 
                 storyBoard.AddandTrimSecClip(media, 1 * step, 2 * step);
 

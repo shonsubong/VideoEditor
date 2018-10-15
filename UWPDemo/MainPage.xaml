@@ -33,7 +33,7 @@
         <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="50" DisplayMode="Overlay" IsPaneOpen="False" >
 
             <SplitView.Content>
-                <views:VideoPreview  Grid.Row="1" Background="Transparent"/>
+                <views:VideoPreview x:Name="VideoPreview" Grid.Row="1" Background="Transparent"/>
             </SplitView.Content>
             
             <SplitView.Pane >
@@ -44,7 +44,7 @@
                                 Style="{StaticResource NavigationBackButtonNormalStyle}"
                                 HorizontalAlignment="Left" Tapped="videoClipsShowButton_Tapped" Padding="0,0,0,0" FontSize="22"/>
                     </Grid>
-                    <views:VideoLibrary x:Name="VideoLibraryView" />
+                    <views:VideoLibrary x:Name="VideoLibrary" />
                 </StackPanel>
             </SplitView.Pane>
 

@@ -26,8 +26,10 @@ namespace UWPDemo
     public sealed partial class MainPage : Page
     {
         public static MainPage Current;
-
         public StoryBoardView CurStoryBoardView { get { return StoryBoardView; } }
+        public VideoLibrary CurVideoLibrary { get { return VideoLibrary; } }
+        public VideoPreview CurVideoPreview { get { return VideoPreview; } }
+
 
         public MainPage()
         {
@@ -94,7 +96,7 @@ namespace UWPDemo
             {
                 VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
                 VideoLibraryTitle.Visibility = Visibility.Visible;
-                VideoLibraryView.Visibility = Visibility.Visible;
+                VideoLibrary.Visibility = Visibility.Visible;
                 videoClipsShowButton.HorizontalAlignment = HorizontalAlignment.Left;
                 VideoSplitView.IsPaneOpen = true;
                 VideoSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;

@@ -101,7 +101,7 @@ namespace UWPDemo.Models
         public void Trim(long startTick, long endTick)
         {
             mediaClip.TrimTimeFromStart = new TimeSpan(startTick);
-            long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick + 1;
+            long trimTickFromEnd = mediaClip.OriginalDuration.Ticks - endTick;
             mediaClip.TrimTimeFromEnd = new TimeSpan(trimTickFromEnd);
             //UpdateBitmapThumbnail();
             RaisePropertyChanged("DurationSec");
