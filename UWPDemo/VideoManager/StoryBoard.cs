@@ -9,6 +9,7 @@ using UWPDemo.Models;
 using UWPDemo.Util;
 using Windows.Media.Editing;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace UWPDemo.VideoManager
@@ -26,6 +27,7 @@ namespace UWPDemo.VideoManager
         {
             Composition = new MediaComposition();
             Clips = new ObservableCollection<Clip>();
+            Composition.OverlayLayers.Add(new MediaOverlayLayer());
             Clips.CollectionChanged += StoryBoardClips_CollectionChanged;
         }
 
@@ -38,9 +40,9 @@ namespace UWPDemo.VideoManager
         {
             Clip clip = Clip.CreateClip(media.MediaClip);
             Clips.Add(clip);
-            clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);        
+            clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);            
         }
-
+               
         public async void AddandTrimSecClip(Media media, double startSec, double endSec)
         {
             long start = TimeSpan.FromSeconds(startSec).Ticks;
@@ -50,6 +52,19 @@ namespace UWPDemo.VideoManager
             if (start < end && duration > end)
             {
                 Clip clip = Clip.CreateClip(media.MediaClip, startSec, endSec, "merong");
+                Clips.Add(clip);
+                clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
+            }
+        }
+
+        public async void AddandTrimSecClip(Color color, double startSec, double endSec)
+        {
+            long start = TimeSpan.FromSeconds(startSec).Ticks;
+            long end = TimeSpan.FromSeconds(endSec).Ticks;
+
+            if (start < end)
+            {
+                Clip clip = Clip.CreateClip(color, startSec, endSec, "merong");
                 Clips.Add(clip);
                 clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
             }
@@ -72,6 +87,7 @@ namespace UWPDemo.VideoManager
             foreach(Clip videoClip in Clips)
             {
                 Composition.Clips.Add(videoClip.MediaClip);
+                //Composition.OverlayLayers[0].Overlays
             }
         }
     }

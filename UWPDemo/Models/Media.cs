@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Media.Core;
 using Windows.Media.Editing;
+using Windows.Media.Effects;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -110,6 +112,13 @@ namespace UWPDemo.Models
         public void Trim(double startSec, double endSec)
         {
             Trim(TimeSpan.FromSeconds(startSec).Ticks, TimeSpan.FromSeconds(endSec).Ticks);
+        }
+
+        public void AddVideoEffect()
+        {
+            //clip.VideoEffectDefinitions.Add(new VideoEffectDefinition(typeof(GrayscaleVideoEffect).FullName));
+            VideoStabilizationEffectDefinition videoEffect = new VideoStabilizationEffectDefinition();
+            //mediaClip.VideoEffectDefinitions.Add(videoEffect);
         }
     }
 }

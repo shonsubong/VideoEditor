@@ -13,6 +13,7 @@ using Windows.Media.Editing;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -34,6 +35,14 @@ namespace UWPDemo.Views
         {
             this.InitializeComponent();
             this.DataContext = App.VideoManager;
+
+            AddColor(Colors.Black, 0, 1);
+            AddColor(Colors.White, 0, 1);
+            AddColor(Colors.Gray, 0, 1);
+            AddColor(Colors.Red, 0, 1);
+            AddColor(Colors.Green, 0, 1);
+            AddColor(Colors.Blue, 0, 1);
+            
         }
 
         private void MediaList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
@@ -78,6 +87,14 @@ namespace UWPDemo.Views
                     App.Tip("file err");
                 }
             }
+        }
+
+        private async void AddColor(Color color, double startSec, double endSec)
+        {
+            Media media = new Media(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(endSec) - TimeSpan.FromSeconds(startSec)));
+
+            media.Thumbnail = await media.MediaClip.GetThumbnailAsync(320, 180);
+            App.VideoManager.MediaClipList.Add(media);
         }
 
     }

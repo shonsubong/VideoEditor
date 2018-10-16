@@ -14,6 +14,7 @@ using Windows.Media.Editing;
 using Windows.Media.Transcoding;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -196,6 +197,8 @@ namespace UWPDemo.ViewModels
                 double step = 1.2;
 
                 //storyBoard.AddClip(media);
+
+                storyBoard.AddandTrimSecClip(Colors.YellowGreen, 0 * step, 1 * step);
 
                 storyBoard.AddandTrimSecClip(media, 0 * step, 1 * step);
 
