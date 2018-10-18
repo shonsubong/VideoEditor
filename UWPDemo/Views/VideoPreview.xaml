@@ -6,17 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="Auto" Height="Auto">
 
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <Button x:Name="videoRefresh" Content="비디오 갱신" Command="{Binding RefreshVideoCommand}" Margin="5" />
-            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <RelativePanel HorizontalAlignment="Stretch">
-
-                    <ContentControl x:Name="mediaElement" Content="{Binding VideoManger.PreviewVideo}" Margin="5" HorizontalAlignment="Stretch"  />
-                </RelativePanel>
-            </ScrollViewer>
+        <!--<ContentControl x:Name="mediaElement" Content="{Binding PreviewVideo}" Margin="5"/>-->
+        <MediaElement x:Name="mediaElement" AutoPlay="False" Margin="5" HorizontalAlignment="Stretch" AreTransportControlsEnabled="True" />
+        <StackPanel Orientation="Vertical">            
+            <TextBlock Text="비디오 프리뷰"/>
+            <Button x:Name="VideoRefreshButton" Content="비디오 갱신" Tapped="VideoRefreshButton_Tapped"  Command="{Binding RefreshVideoCommand}" Margin="5" />
         </StackPanel>
+                
     </Grid>
 </Page>

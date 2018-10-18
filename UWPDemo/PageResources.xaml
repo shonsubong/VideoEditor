@@ -1,0 +1,47 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDemo"
+    xmlns:vm="using:UWPDemo.ViewModels"
+    xmlns:util="using:UWPDemo.Util"
+    xmlns:views="using:UWPDemo.Views">
+
+    <util:StringFormatConverter x:Key="StringFormatConverter" />
+
+    <!--
+    <DataTemplate x:DataType="vm:StoryBoardViewModel" x:Key="StoryBoardVM">
+        <views:StoryBoard />
+    </DataTemplate>
+    
+    <DataTemplate x:DataType="vm:VideoClipsViewModel" x:Key="VideoClipsVM">
+        <views:VideoClips />
+    </DataTemplate>
+    
+    <DataTemplate x:DataType="vm:VideoPreviewViewModel" x:Key="VideoPreviewVM">
+        <views:VideoPreview />
+    </DataTemplate>
+    -->
+
+
+    <Style x:Key="GridViewItemExpanded" TargetType="GridViewItem">
+        <Setter Property="Margin" Value="4,0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="Height" Value="200"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GridViewItem">
+                    <GridViewItemPresenter
+                                    SelectedBackground="Yellow"
+                                    SelectedPointerOverBorderBrush="Yellow"
+                                    SelectedBorderThickness="10"
+                                    ContentMargin="4"
+                                    SelectedPointerOverBackground="Yellow"
+                                    SelectionCheckMarkVisualEnabled="True">
+                    </GridViewItemPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,85 @@
+﻿<Page
+    x:Class="UWPDemo.Views.StoryBoardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDemo.Views"
+    xmlns:vm="using:UWPDemo.ViewModels"
+    xmlns:vmg="using:UWPDemo.VideoManager"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Height="300"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary Source="../PageResources.xaml" />
+    </Page.Resources>
+
+    <Grid>
+        
+        
+        <GridView x:Name="StoryList" SelectionMode="Extended" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                  AllowDrop="True" CanReorderItems="True" CanDragItems="True"   
+                  DragItemsStarting="StoryList_DragItemsStarting"
+                  SelectionChanged="StoryList_SelectionChanged"
+                  DragEnter="StoryList_DragEnter"
+                  DragItemsCompleted="StoryList_DragItemsCompleted"
+                  Drop="StoryList_Drop"
+                  ItemsSource="{Binding StoryBord.Clips}" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.HorizontalScrollMode="Enabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollMode="Disabled"
+                  Height="230" VerticalAlignment="Top" Padding="20,0" Margin="10,0"
+                  ItemContainerStyle="{StaticResource GridViewItemExpanded}">
+            
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:Name="ClipItem" PointerEntered="ClipItem_PointerEntered" PointerExited="ClipItem_PointerExited" RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform  x:Name="gridTransform" ScaleX="1" ScaleY="1"/>
+                        </Grid.RenderTransform>
+                        <Grid.Resources>
+                            <Storyboard x:Name="EnterStoryboard">
+                                <FadeInThemeAnimation Storyboard.TargetName="DeleteClipButton"/>
+                                <!--<DoubleAnimation Storyboard.TargetName="gridTransform" From="1" To="1.05" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleX"/>
+                                <DoubleAnimation Storyboard.TargetName="gridTransform" From="1" To="1.05" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleY"/>-->
+                            </Storyboard>
+                            <Storyboard x:Name="ExitStoryboard">
+                                <FadeOutThemeAnimation Storyboard.TargetName="DeleteClipButton" />
+                                <!--<DoubleAnimation Storyboard.TargetName="gridTransform" From="1.05" To="1" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleX"/>
+                                <DoubleAnimation Storyboard.TargetName="gridTransform" From="1.05" To="1" Duration="0:0:0.1" Storyboard.TargetProperty="ScaleY"/>-->
+                            </Storyboard>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="{Binding Brush, Mode=OneWay}"  CornerRadius="3" MinWidth="90" MinHeight="60">
+                            <Image  Source="{Binding Thumbnail, Mode=OneWay}" Stretch="UniformToFill" HorizontalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Row="0" Visibility="Collapsed">
+                            <TextBlock Grid.Row="0" Text="{Binding TrimStart, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black"  FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Row="0" Text="{Binding TrimEnd, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Row="0" Text="{Binding TrimDuration, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="0" Text="{Binding DurationSec, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0.0} sec'}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Row="1" Text="{Binding Subtitle, Mode=TwoWay}" VerticalAlignment="Bottom" Background="Wheat" Foreground="Black" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <Button x:Name="DeleteClipButton" Content="X" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="DeleteClipButton_Tapped"/>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>            
+        </GridView>
+
+        <Button Visibility="Collapsed" x:Name="LeftScroll" Width="40" Height="40" VerticalAlignment="Top" Margin="0,65,0,0" HorizontalAlignment="Left" PointerEntered="LeftScroll_PointerPressed" Tapped="LeftScroll_Tapped" />
+
+        <Button Visibility="Collapsed" x:Name="RightScroll" Width="40" Height="40" VerticalAlignment="Top" Margin="0,65,0,0" HorizontalAlignment="Right" Tapped="RightScroll_Tapped" />
+
+
+
+    </Grid>
+</Page>

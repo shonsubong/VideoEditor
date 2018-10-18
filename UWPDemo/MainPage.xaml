@@ -9,66 +9,72 @@
     xmlns:views="using:UWPDemo.Views"    
     mc:Ignorable="d"
     DataContext="{Binding MainPageViewModel, Source={StaticResource Locator}}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    SizeChanged="Page_SizeChanged">
 
     <Page.Resources>
-        <ResourceDictionary Source="MainPageResources.xaml" />
+        <ResourceDictionary Source="PageResources.xaml" />
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*" MinHeight="290"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="260"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
 
-        <Frame Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <RelativePanel HorizontalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                    <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="5" />
+        <Grid Grid.Row="0" Margin="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="saveFile" Content="내보내기" Command="{Binding ExportVideoCommand}" Margin="3" />
                 </StackPanel>
-            </RelativePanel>
-        </Frame>
+        </Grid>
 
-        <Frame Margin="0,0" Grid.Row="1" Grid.Column="0" 
-                         Width="600" MinWidth="100"
-                         Background="LightGray" HorizontalAlignment="Left">
-            <StackPanel Orientation="Vertical">
-                <!-- menu bar needed -->
-                
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="20" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="프로젝트 라이브러리"/>
+        <SplitView x:Name="VideoSplitView" Grid.Row="1" PanePlacement="Right" OpenPaneLength="350" CompactPaneLength="50" DisplayMode="Overlay" IsPaneOpen="False" >
 
-                    <Button Grid.Column="1" Content="  "/>
-                </Grid>
-                <views:VideoClips/>
-            </StackPanel>
-        </Frame>
+            <SplitView.Content>
+                <views:VideoPreview x:Name="VideoPreview" Grid.Row="1" Background="Transparent"/>
+            </SplitView.Content>
+            
+            <SplitView.Pane >
+                <StackPanel Orientation="Vertical">
+                    <Grid HorizontalAlignment="Stretch">                        
+                        <TextBlock x:Name="VideoLibraryTitle" Text="프로젝트 라이브러리" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button x:Name="videoClipsShowButton" Content="&#xE154;" Width="50"
+                                Style="{StaticResource NavigationBackButtonNormalStyle}"
+                                HorizontalAlignment="Left" Tapped="videoClipsShowButton_Tapped" Padding="0,0,0,0" FontSize="22"/>
+                    </Grid>
+                    <views:VideoLibrary x:Name="VideoLibrary" />
+                </StackPanel>
+            </SplitView.Pane>
 
-        <Frame Grid.Row="1" Grid.Column="1">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="비디오 프리뷰"/>
-                <views:VideoPreview/>
-            </StackPanel>
-        </Frame>
+            
+        </SplitView>
 
-        <Frame Margin="0,10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                         Height="200"
-                         MinHeight="100"
-                         Background="White">
+        <Grid Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#060606" Background="#44bbbbbb">
+
+            <Slider  x:Name="ZoomSlider" 
+                             Minimum="0.1" Maximum="10" 
+                            Margin="4,0" Width="222" Height="40" HorizontalAlignment="Right"
+                             LargeChange="1"   StepFrequency="0.1"   IsThumbToolTipEnabled="True"
+                             Value="{Binding Scale,Mode=TwoWay}"/>
+            <Button  x:Name="SplitButton" HorizontalAlignment="Right" Style="{StaticResource NavigationBackButtonNormalStyle}" Tapped="SplitButton_Tapped">
+                <FontIcon  x:Name="SplitIcon" FontSize="18"  FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" RenderTransformOrigin="0.5,0.5">
+                    <FontIcon.RenderTransform>
+                        <CompositeTransform/>
+                    </FontIcon.RenderTransform>
+                </FontIcon>
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="3">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="스토리 보드"/>
-                <views:StoryBoard/>
+                <views:StoryBoardView x:Name="StoryBoardView"/>
             </StackPanel>
-        </Frame>
+        </Grid>
+
+       
 
     </Grid>
 </Page>
