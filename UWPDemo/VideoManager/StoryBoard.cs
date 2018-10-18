@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UWPDemo.Models;
 using UWPDemo.Util;
+using Windows.Foundation;
 using Windows.Media.Editing;
 using Windows.Storage;
 using Windows.UI;
@@ -27,7 +28,6 @@ namespace UWPDemo.VideoManager
         {
             Composition = new MediaComposition();
             Clips = new ObservableCollection<Clip>();
-            Composition.OverlayLayers.Add(new MediaOverlayLayer());
             Clips.CollectionChanged += StoryBoardClips_CollectionChanged;
         }
 
@@ -51,7 +51,7 @@ namespace UWPDemo.VideoManager
 
             if (start < end && duration > end)
             {
-                Clip clip = Clip.CreateClip(media.MediaClip, startSec, endSec, "merong");
+                Clip clip = Clip.CreateClip(media.MediaClip, startSec, endSec, "this is a color card~");
                 Clips.Add(clip);
                 clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
             }
@@ -64,7 +64,7 @@ namespace UWPDemo.VideoManager
 
             if (start < end)
             {
-                Clip clip = Clip.CreateClip(color, startSec, endSec, "merong");
+                Clip clip = Clip.CreateClip(color, startSec, endSec, "this is a video clip!!!");
                 Clips.Add(clip);
                 clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
             }
@@ -80,14 +80,34 @@ namespace UWPDemo.VideoManager
             Clips.Clear();
         }
 
-        public void AppendAllClips()
+        public void AppendAllClips(double screenWidth, double screenHeight)
         {
             Composition.Clips.Clear();
+            Composition.OverlayLayers.Clear();
+            var overlayLayer = new MediaOverlayLayer();
 
-            foreach(Clip videoClip in Clips)
+            foreach (Clip videoClip in Clips)
             {
                 Composition.Clips.Add(videoClip.MediaClip);
-                //Composition.OverlayLayers[0].Overlays
+                try
+                {
+                    Rect overlayPosition;
+                    overlayPosition.Height = videoClip.CaptionClip.Height;
+                    overlayPosition.Width = videoClip.CaptionClip.Width;
+                    overlayPosition.X = (screenWidth - overlayPosition.Width) / 2;
+                    overlayPosition.Y = screenHeight * 4 / 5;
+                    videoClip.CaptionClip.Overlay.Position = overlayPosition;
+
+                    videoClip.CaptionClip.Overlay.Delay = TimeSpan.FromSeconds(0); // this may cause problems -> should be fixed!
+
+                    overlayLayer.Overlays.Add(videoClip.CaptionClip.Overlay);
+                    Composition.OverlayLayers.Add(overlayLayer);
+                    //Composition.OverlayLayers[0].Overlays
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }
             }
         }
     }

@@ -15,16 +15,20 @@ namespace UWPDemo.Models
     /// </summary>
     public class Clip : Media
     {
-
-        private string subtitle;
-        public string Subtitle
+        
+        public string CaptionText
         {
-            get { return subtitle; }
+            get { return CaptionClip.Text; }
             set
             {
-                subtitle = value;
+                CaptionClip.Text = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public Caption CaptionClip
+        {
+            get; set;
         }
 
         public long TrimStart
@@ -63,27 +67,27 @@ namespace UWPDemo.Models
             overlay = new MediaOverlay(clip);
         }
 
-        public static Clip CreateClip(MediaClip mediaClip, string subtitle = "")
+        public static Clip CreateClip(MediaClip mediaClip, string caption = "")
         {
-            Clip clip = new Clip(mediaClip.Clone());            
-            clip.Subtitle = subtitle;
+            Clip clip = new Clip(mediaClip.Clone());
+            clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
             return clip;
         }
 
-        public static Clip CreateClip(MediaClip mediaClip, double start, double end, string subtitle = "")
+        public static Clip CreateClip(MediaClip mediaClip, double start, double end, string caption = "")
         {
             Clip clip = new Clip(mediaClip.Clone());
             clip.Trim(start, end);
-            clip.Subtitle = subtitle;
+            clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
             //clip.AddVideoEffect();
             return clip;
         }
 
-        public static Clip CreateClip(Color color, double start, double end, string subtitle = "")
+        public static Clip CreateClip(Color color, double start, double end, string caption = "")
         {
             Clip clip = new Clip(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(end) - TimeSpan.FromSeconds(start)));
             clip.Trim(start, end);
-            clip.Subtitle = subtitle;
+            clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
             //clip.AddVideoEffect();
             return clip;
         }
