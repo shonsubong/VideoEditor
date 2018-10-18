@@ -7,6 +7,9 @@ using Windows.Media.Editing;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Media.Core;
+using Microsoft.Graphics.Canvas;
+using Windows.Graphics.Imaging;
 
 namespace UWPDemo.Models
 {
@@ -23,6 +26,7 @@ namespace UWPDemo.Models
             set
             {
                 subtitle = value;
+                SetSubtitleOverlay(subtitle);
                 RaisePropertyChanged();
             }
         }
@@ -42,25 +46,36 @@ namespace UWPDemo.Models
             get { return MediaClip.TrimmedDuration.Ticks; }
         }
 
-        private MediaOverlay overlay;
-        public MediaOverlay Overlay
+        private List<MediaOverlay> overlayList;
+
+        private MediaOverlay subtitleOverlay;
+        public MediaOverlay SubtitleOverlay
         {
-            get { return overlay; }
+            get { return subtitleOverlay; }
             set
             {
-                overlay = value;
+                subtitleOverlay = value;
                 RaisePropertyChanged();
             }
         }
 
         public Clip(MediaClip mediaClip) : base(mediaClip)
         {
-            
+            overlayList = new List<MediaOverlay>();
         }
 
-        public void SetOverlay(MediaClip clip)
-        {
-            overlay = new MediaOverlay(clip);
+        public void SetSubtitleOverlay(string subtitile)
+       {
+            using (CanvasRenderTarget frame = new CanvasRenderTarget(CanvasDevice.GetSharedDevice(), 100.0f, 100.0f, 96f))
+            {
+                using (var session = frame.CreateDrawingSession())
+                {
+                    session.DrawText(subtitile, new System.Numerics.Vector2(100, 100), Colors.White);
+                }
+                subtitleOverlay = new MediaOverlay(MediaClip.CreateFromSurface(frame, MediaClip.OriginalDuration));
+                subtitleOverlay.Position = new Windows.Foundation.Rect(0, 0, 400, 200);
+                subtitleOverlay.Opacity = 0.75;
+            }
         }
 
         public static Clip CreateClip(MediaClip mediaClip, string subtitle = "")

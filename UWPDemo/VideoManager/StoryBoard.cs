@@ -17,9 +17,8 @@ namespace UWPDemo.VideoManager
     public class StoryBoard : ViewModelBase
     {
         public ObservableCollection<Clip> Clips { get; private set; }
-
         public MediaComposition Composition { get; private set; }
-
+        public MediaOverlayLayer SubtileOverlayLayer { get; private set; }
 
         public EventHandler StoryBoardClipsUpdated;
 
@@ -27,7 +26,8 @@ namespace UWPDemo.VideoManager
         {
             Composition = new MediaComposition();
             Clips = new ObservableCollection<Clip>();
-            Composition.OverlayLayers.Add(new MediaOverlayLayer());
+            SubtileOverlayLayer = new MediaOverlayLayer();
+            Composition.OverlayLayers.Add(SubtileOverlayLayer);
             Clips.CollectionChanged += StoryBoardClips_CollectionChanged;
         }
 
@@ -43,21 +43,24 @@ namespace UWPDemo.VideoManager
             clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);            
         }
                
-        public async void AddandTrimSecClip(Media media, double startSec, double endSec)
+        public async void AddClip(Media media, double startSec, double endSec, int insert = -1)
         {
             long start = TimeSpan.FromSeconds(startSec).Ticks;
             long end = TimeSpan.FromSeconds(endSec).Ticks;
             long duration = media.MediaClip.OriginalDuration.Ticks;
 
-            if (start < end && duration > end)
+            if (start < end && duration >= end)
             {
                 Clip clip = Clip.CreateClip(media.MediaClip, startSec, endSec, "merong");
-                Clips.Add(clip);
+                if (insert < 0)
+                    Clips.Add(clip);
+                else
+                    Clips.Insert(insert, clip);
                 clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
             }
         }
 
-        public async void AddandTrimSecClip(Color color, double startSec, double endSec)
+        public async void AddClip(Color color, double startSec, double endSec, int insert = -1)
         {
             long start = TimeSpan.FromSeconds(startSec).Ticks;
             long end = TimeSpan.FromSeconds(endSec).Ticks;
@@ -65,11 +68,15 @@ namespace UWPDemo.VideoManager
             if (start < end)
             {
                 Clip clip = Clip.CreateClip(color, startSec, endSec, "merong");
-                Clips.Add(clip);
+                if (insert < 0)
+                    Clips.Add(clip);
+                else
+                    Clips.Insert(insert, clip);
+
                 clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
             }
         }
-
+       
         public void Remove(Clip clip)
         {
             Clips.Remove(clip);
@@ -83,11 +90,12 @@ namespace UWPDemo.VideoManager
         public void AppendAllClips()
         {
             Composition.Clips.Clear();
+            Composition.OverlayLayers[0].Overlays.Clear();
 
-            foreach(Clip videoClip in Clips)
+            foreach (Clip videoClip in Clips)
             {
                 Composition.Clips.Add(videoClip.MediaClip);
-                //Composition.OverlayLayers[0].Overlays
+                //Composition.OverlayLayers[0].Overlays.Add(videoClip.Overlay);
             }
         }
     }

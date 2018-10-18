@@ -55,6 +55,11 @@ namespace UWPDemo.Models
             }
         }
 
+        public bool IsBrushColor
+        {
+            get { return brush != null; }
+        }
+
         public double DurationSec
         {
             get { return mediaClip.TrimmedDuration.TotalSeconds; }           

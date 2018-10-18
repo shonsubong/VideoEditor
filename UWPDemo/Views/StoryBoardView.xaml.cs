@@ -67,9 +67,27 @@ namespace UWPDemo.Views
             DragOperationDeferral def = e.GetDeferral();
             def.Complete();
 
+            Point pos = e.GetPosition(this);
+
+            GridViewItem gvi = (GridViewItem)CurStoryList.ContainerFromIndex(0);
+            int index = 0;
+            if (gvi != null)
+            {
+                double itemWidth = gvi.ActualWidth + gvi.Margin.Left + gvi.Margin.Right;
+                index = Math.Min(CurStoryList.Items.Count, (int)(pos.X / itemWidth - 0.5));
+            }
+
             if (App.VideoManager.Drop.MediaClip != null)
             {
-                App.VideoManager.SplitVideoFile(App.VideoManager.Drop);
+                if(App.VideoManager.Drop.IsBrushColor)
+                {
+                    App.VideoManager.InsertClip(App.VideoManager.Drop, 0, 1.0, index);
+                }
+                else
+                {
+                    //Test Code
+                    App.VideoManager.SplitVideoFile(App.VideoManager.Drop);
+                }
             }
         }
 

@@ -55,36 +55,71 @@ namespace UWPDemo.Views
             Media m = MediaList.SelectedItem as Media;
         }
 
+        private bool IsImageFile(StorageFile file)
+        {
+            if (file.FileType == ".jpg" 
+                || file.FileType == ".jpeg"
+                || file.FileType == ".png"
+                || file.FileType == ".bmp"
+                || file.FileType == ".gif"
+                || file.FileType == ".tif"
+                || file.FileType == ".tiff")
+            {
+                return true;
+            }
+            return false;
+        }
         private async void AddMediaFileButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FileOpenPicker filePicker = new FileOpenPicker();
-            filePicker.SuggestedStartLocation = PickerLocationId.VideosLibrary;
+            filePicker.SuggestedStartLocation = PickerLocationId.VideosLibrary;            
             filePicker.FileTypeFilter.Add(".mp4");
             filePicker.FileTypeFilter.Add(".m4v");
             filePicker.FileTypeFilter.Add(".mov");
             filePicker.FileTypeFilter.Add(".asf");
             filePicker.FileTypeFilter.Add(".avi");
             filePicker.FileTypeFilter.Add(".wmv");
+
+            filePicker.FileTypeFilter.Add(".jpg");
+            filePicker.FileTypeFilter.Add(".jpeg");
+            filePicker.FileTypeFilter.Add(".png");
+            filePicker.FileTypeFilter.Add(".bmp");
+            filePicker.FileTypeFilter.Add(".gif");
+            filePicker.FileTypeFilter.Add(".tif");
+            filePicker.FileTypeFilter.Add(".tiff");
+
             filePicker.ViewMode = PickerViewMode.Thumbnail;
+            
+            var files = await filePicker.PickMultipleFilesAsync();
 
-            StorageFile file = await filePicker.PickSingleFileAsync();
-
-            if (file != null)
+            foreach (StorageFile file in files)
             {
-                try
+                if (file != null)
                 {
-                    StorageItemAccessList storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
-                    storageItemAccessList.Add(file);
+                    try
+                    {
+                        StorageItemAccessList storageItemAccessList = StorageApplicationPermissions.FutureAccessList;
+                        storageItemAccessList.Add(file);
 
-                    Media media = new Media(await MediaClip.CreateFromFileAsync(file));
-                    media.Thumbnail = await file.GetThumbnailBitmapAsync();
-                    media.Name = file.Name;
-
-                    App.VideoManager.MediaClipList.Add(media);
-                }
-                catch (Exception)
-                {
-                    App.Tip("file err");
+                        if(IsImageFile(file))
+                        {
+                            Media media = new Media(await MediaClip.CreateFromImageFileAsync(file, new TimeSpan(0, 1, 0)));
+                            media.Thumbnail = await file.GetThumbnailBitmapAsync();
+                            media.Name = file.Name;
+                            App.VideoManager.MediaClipList.Add(media);
+                        }
+                        else
+                        {
+                            Media media = new Media(await MediaClip.CreateFromFileAsync(file));
+                            media.Thumbnail = await file.GetThumbnailBitmapAsync();
+                            media.Name = file.Name;
+                            App.VideoManager.MediaClipList.Add(media);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        App.Tip("file err");
+                    }
                 }
             }
         }
@@ -93,9 +128,19 @@ namespace UWPDemo.Views
         {
             Media media = new Media(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(endSec) - TimeSpan.FromSeconds(startSec)));
 
+            media.Brush = new SolidColorBrush(color);
             media.Thumbnail = await media.MediaClip.GetThumbnailAsync(320, 180);
-            App.VideoManager.MediaClipList.Add(media);
+            App.VideoManager.ColorClipList.Add(media);
         }
 
+        private void ColorList_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+            App.VideoManager.Drop = e.Items.First() as Media;
+        }
+
+        private void ColorList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Media m = ColorList.SelectedItem as Media;
+        }
     }
 }

@@ -37,7 +37,9 @@ namespace UWPDemo.ViewModels
 
         public ObservableCollection<Media> MediaClipList { get; private set; }
 
-       
+        public ObservableCollection<Media> ColorClipList { get; private set; }
+
+
         public StoryBoard StoryBord
         {
             get { return storyBoard; }
@@ -58,6 +60,7 @@ namespace UWPDemo.ViewModels
             storageItemAccessList.Clear();
 
             MediaClipList = new ObservableCollection<Media>();
+            ColorClipList = new ObservableCollection<Media>();
         }
 
         public async Task ImportVideoFileAsync()
@@ -198,19 +201,17 @@ namespace UWPDemo.ViewModels
 
                 //storyBoard.AddClip(media);
 
-                storyBoard.AddandTrimSecClip(Colors.YellowGreen, 0 * step, 1 * step);
+                AppendClip(media, 0 * step, 1 * step);
 
-                storyBoard.AddandTrimSecClip(media, 0 * step, 1 * step);
+                AppendClip(media, 1 * step, 2 * step);
 
-                storyBoard.AddandTrimSecClip(media, 1 * step, 2 * step);
+                AppendClip(media, 2 * step, 3 * step);
 
-                storyBoard.AddandTrimSecClip(media, 2 * step, 3 * step);
+                AppendClip(media, 3 * step, 4 * step);
 
-                storyBoard.AddandTrimSecClip(media, 3 * step, 4 * step);
+                AppendClip(media, 4 * step, 5 * step);
 
-                storyBoard.AddandTrimSecClip(media, 4 * step, 5 * step);
-
-                storyBoard.AddandTrimSecClip(media, 5 * step, 6 * step);
+                AppendClip(media, 5 * step, 6 * step);
 
             }
             catch (Exception e)
@@ -224,9 +225,14 @@ namespace UWPDemo.ViewModels
 
         }
 
-        public void AppendClip()
+        public void AppendClip(Media media, double startSec, double endSec)
         {
+            storyBoard.AddClip(media, startSec, endSec);
+        }
 
+        public void InsertClip(Media media, double startSec, double endSec, int index)
+        {
+            storyBoard.AddClip(media, startSec, endSec, index);
         }
 
 
