@@ -81,7 +81,7 @@ namespace UWPDemo.Views
                 Clip clip = btn.DataContext as Clip;
                 if (clip != null)
                 {
-                    App.VideoManager.StoryBord.Remove(clip);
+                    App.VideoManager.StoryBoard.Remove(clip);
                 }
             }
         }
