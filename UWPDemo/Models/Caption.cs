@@ -23,10 +23,10 @@ namespace UWPDemo.Models
         {
             try
             {
-                _duration = duration;
+                _duration = TimeSpan.FromTicks(duration.Ticks - 2000000);
                 _dev = CanvasDevice.GetSharedDevice();
                 _ruler = new CanvasRenderTarget(_dev, 1, 1, 96).CreateDrawingSession();
-                _updateText(text, fontSize);
+                _updateText(text, fontSize*2);
             }
             catch (Exception e)
             {

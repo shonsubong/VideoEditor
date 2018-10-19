@@ -40,7 +40,7 @@ namespace UWPDemo.ViewModels
         public ObservableCollection<Media> ColorClipList { get; private set; }
 
 
-        public StoryBoard StoryBord
+        public StoryBoard StoryBoard
         {
             get { return storyBoard; }
             set
@@ -86,7 +86,7 @@ namespace UWPDemo.ViewModels
 
         public void RefreshPreviewVideo()
         {
-            storyBoard.AppendAllClips();
+            storyBoard.AppendAllClips(previewVideo.ActualWidth, previewVideo.ActualHeight);
             UpdateTimelineMarkerCollection();
 
             previewVideo.Position = TimeSpan.Zero;

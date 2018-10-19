@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UWPDemo.Models;
 using UWPDemo.Util;
+using Windows.Foundation;
 using Windows.Media.Editing;
 using Windows.Storage;
 using Windows.UI;
@@ -60,22 +61,22 @@ namespace UWPDemo.VideoManager
             }
         }
 
-        public async void AddClip(Color color, double startSec, double endSec, int insert = -1)
-        {
-            long start = TimeSpan.FromSeconds(startSec).Ticks;
-            long end = TimeSpan.FromSeconds(endSec).Ticks;
+        //public async void AddClip(Color color, double startSec, double endSec, int insert = -1)
+        //{
+        //    long start = TimeSpan.FromSeconds(startSec).Ticks;
+        //    long end = TimeSpan.FromSeconds(endSec).Ticks;
 
-            if (start < end)
-            {
-                Clip clip = Clip.CreateClip(color, startSec, endSec, "merong");
-                if (insert < 0)
-                    Clips.Add(clip);
-                else
-                    Clips.Insert(insert, clip);
+        //    if (start < end)
+        //    {
+        //        Clip clip = Clip.CreateClip(color, startSec, endSec, "merong");
+        //        if (insert < 0)
+        //            Clips.Add(clip);
+        //        else
+        //            Clips.Insert(insert, clip);
 
-                clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
-            }
-        }
+        //        clip.Thumbnail = await clip.MediaClip.GetThumbnailAsync(320, 180);
+        //    }
+        //}
        
         public void Remove(Clip clip)
         {
@@ -87,7 +88,7 @@ namespace UWPDemo.VideoManager
             Clips.Clear();
         }
 
-        public void AppendAllClips()
+        public void AppendAllClips(double screenWidth, double screenHeight)
         {
             Composition.Clips.Clear();
             Composition.OverlayLayers[0].Overlays.Clear();
@@ -95,7 +96,17 @@ namespace UWPDemo.VideoManager
             foreach (Clip videoClip in Clips)
             {
                 Composition.Clips.Add(videoClip.MediaClip);
-                //Composition.OverlayLayers[0].Overlays.Add(videoClip.Overlay);
+
+                Rect overlayPosition;
+                overlayPosition.Height = videoClip.CaptionClip.Height;
+                overlayPosition.Width = videoClip.CaptionClip.Width;
+                overlayPosition.X = (screenWidth - overlayPosition.Width) / 2;
+                overlayPosition.Y = screenHeight * 4 / 5;
+                videoClip.CaptionClip.Overlay.Position = overlayPosition;
+
+                videoClip.CaptionClip.Overlay.Delay = TimeSpan.FromTicks(videoClip.MediaClip.StartTimeInComposition.Ticks + 0);
+
+                Composition.OverlayLayers[0].Overlays.Add(videoClip.CaptionOverlay);
             }
         }
     }

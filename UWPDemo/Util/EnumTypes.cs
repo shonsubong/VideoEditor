@@ -11,4 +11,11 @@ namespace UWPDemo.Util
         StatusMessage,
         ErrorMessage
     };
+
+    public enum MediaClipType
+    {
+        Video,
+        Image,
+        Color,
+    }
 }

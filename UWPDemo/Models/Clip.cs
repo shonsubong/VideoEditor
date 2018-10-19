@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.Media.Core;
 using Microsoft.Graphics.Canvas;
 using Windows.Graphics.Imaging;
+using System.Drawing;
 
 namespace UWPDemo.Models
 {
@@ -18,18 +19,17 @@ namespace UWPDemo.Models
     /// </summary>
     public class Clip : Media
     {
-
-        private string subtitle;
-        public string Subtitle
+        public string CaptionText
         {
-            get { return subtitle; }
+            get { return CaptionClip.Text; }
             set
             {
-                subtitle = value;
-                SetSubtitleOverlay(subtitle);
+                CaptionClip.Text = value;
                 RaisePropertyChanged();
             }
         }
+
+        public Caption CaptionClip { get; private set; }
 
         public long TrimStart
         {
@@ -48,15 +48,9 @@ namespace UWPDemo.Models
 
         private List<MediaOverlay> overlayList;
 
-        private MediaOverlay subtitleOverlay;
-        public MediaOverlay SubtitleOverlay
+        public MediaOverlay CaptionOverlay
         {
-            get { return subtitleOverlay; }
-            set
-            {
-                subtitleOverlay = value;
-                RaisePropertyChanged();
-            }
+            get { return CaptionClip.Overlay; }            
         }
 
         public Clip(MediaClip mediaClip) : base(mediaClip)
@@ -64,43 +58,50 @@ namespace UWPDemo.Models
             overlayList = new List<MediaOverlay>();
         }
 
-        public void SetSubtitleOverlay(string subtitile)
-       {
-            using (CanvasRenderTarget frame = new CanvasRenderTarget(CanvasDevice.GetSharedDevice(), 100.0f, 100.0f, 96f))
-            {
-                using (var session = frame.CreateDrawingSession())
-                {
-                    session.DrawText(subtitile, new System.Numerics.Vector2(100, 100), Colors.White);
-                }
-                subtitleOverlay = new MediaOverlay(MediaClip.CreateFromSurface(frame, MediaClip.OriginalDuration));
-                subtitleOverlay.Position = new Windows.Foundation.Rect(0, 0, 400, 200);
-                subtitleOverlay.Opacity = 0.75;
-            }
-        }
-
-        public static Clip CreateClip(MediaClip mediaClip, string subtitle = "")
+        public static Clip CreateClip(MediaClip mediaClip, string caption = "")
         {
-            Clip clip = new Clip(mediaClip.Clone());            
-            clip.Subtitle = subtitle;
+            Clip clip = new Clip(mediaClip.Clone());
+            clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
+            clip.CaptionText = caption;
             return clip;
         }
 
-        public static Clip CreateClip(MediaClip mediaClip, double start, double end, string subtitle = "")
+        public static Clip CreateClip(MediaClip mediaClip, double start, double end, string caption = "")
         {
             Clip clip = new Clip(mediaClip.Clone());
             clip.Trim(start, end);
-            clip.Subtitle = subtitle;
+            clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
+            clip.CaptionText = clip.CaptionClip.Text;
             //clip.AddVideoEffect();
             return clip;
         }
 
-        public static Clip CreateClip(Color color, double start, double end, string subtitle = "")
+        //public static Clip CreateClip(Color color, double start, double end, string caption = "")
+        //{
+        //    Clip clip = new Clip(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(end) - TimeSpan.FromSeconds(start)));
+        //    clip.Trim(start, end);
+        //    clip.CaptionClip = new Caption(caption, clip.MediaClip.TrimmedDuration);
+        //    //clip.AddVideoEffect();
+        //    return clip;
+        //}
+
+        public void SetCaption(Size screenSize, double startSec)
         {
-            Clip clip = new Clip(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(end) - TimeSpan.FromSeconds(start)));
-            clip.Trim(start, end);
-            clip.Subtitle = subtitle;
-            //clip.AddVideoEffect();
-            return clip;
+
         }
+
+        //public void SetCaptionOverlay(string subtitile)
+        //{
+        //    using (CanvasRenderTarget frame = new CanvasRenderTarget(CanvasDevice.GetSharedDevice(), 100.0f, 100.0f, 96f))
+        //    {
+        //        using (var session = frame.CreateDrawingSession())
+        //        {
+        //            session.DrawText(subtitile, new System.Numerics.Vector2(100, 100), Colors.White);
+        //        }
+        //        captionOverlay = new MediaOverlay(MediaClip.CreateFromSurface(frame, MediaClip.OriginalDuration));
+        //        captionOverlay.Position = new Windows.Foundation.Rect(0, 0, 400, 200);
+        //        captionOverlay.Opacity = 0.75;
+        //    }
+        //}
     }
 }

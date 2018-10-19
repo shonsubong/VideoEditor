@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UWPDemo.Models;
+using UWPDemo.Util;
 using UWPDemo.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
@@ -79,7 +80,8 @@ namespace UWPDemo.Views
 
             if (App.VideoManager.Drop.MediaClip != null)
             {
-                if(App.VideoManager.Drop.IsBrushColor)
+                if(App.VideoManager.Drop.ClipType == MediaClipType.Color
+                    || App.VideoManager.Drop.ClipType == MediaClipType.Image)
                 {
                     App.VideoManager.InsertClip(App.VideoManager.Drop, 0, 1.0, index);
                 }

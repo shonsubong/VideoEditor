@@ -106,6 +106,7 @@ namespace UWPDemo.Views
                             Media media = new Media(await MediaClip.CreateFromImageFileAsync(file, new TimeSpan(0, 1, 0)));
                             media.Thumbnail = await file.GetThumbnailBitmapAsync();
                             media.Name = file.Name;
+                            media.ClipType = MediaClipType.Image;
                             App.VideoManager.MediaClipList.Add(media);
                         }
                         else
@@ -113,6 +114,7 @@ namespace UWPDemo.Views
                             Media media = new Media(await MediaClip.CreateFromFileAsync(file));
                             media.Thumbnail = await file.GetThumbnailBitmapAsync();
                             media.Name = file.Name;
+                            media.ClipType = MediaClipType.Video;
                             App.VideoManager.MediaClipList.Add(media);
                         }
                     }
@@ -127,7 +129,7 @@ namespace UWPDemo.Views
         private async void AddColor(Color color, double startSec, double endSec)
         {
             Media media = new Media(MediaClip.CreateFromColor(color, TimeSpan.FromSeconds(endSec) - TimeSpan.FromSeconds(startSec)));
-
+            media.ClipType = MediaClipType.Color;
             media.Brush = new SolidColorBrush(color);
             media.Thumbnail = await media.MediaClip.GetThumbnailAsync(320, 180);
             App.VideoManager.ColorClipList.Add(media);

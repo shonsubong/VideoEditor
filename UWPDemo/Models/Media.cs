@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UWPDemo.Util;
 using Windows.Media.Core;
 using Windows.Media.Editing;
 using Windows.Media.Effects;
@@ -20,6 +21,17 @@ namespace UWPDemo.Models
         public Media(MediaClip mediaClip)
         {
             this.MediaClip = mediaClip;
+        }
+
+        private MediaClipType clipType;
+        public MediaClipType ClipType
+        {
+            get { return clipType; }
+            set
+            {
+                clipType = value;
+                RaisePropertyChanged();
+            }
         }
 
         private string name;
