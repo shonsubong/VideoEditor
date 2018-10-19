@@ -24,7 +24,7 @@
                   DragEnter="StoryList_DragEnter"
                   DragItemsCompleted="StoryList_DragItemsCompleted"
                   Drop="StoryList_Drop"
-                  ItemsSource="{Binding StoryBord.Clips}" 
+                  ItemsSource="{Binding StoryBoard.Clips}" 
                   ScrollViewer.HorizontalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -68,7 +68,7 @@
                             <TextBlock Grid.Row="0" Text="{Binding TrimDuration, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0}'}" Foreground="Black" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         </StackPanel>
                         <TextBlock Grid.Row="0" Text="{Binding DurationSec, Mode=TwoWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0.0} sec'}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                        <TextBox Grid.Row="1" Text="{Binding Subtitle, Mode=TwoWay}" VerticalAlignment="Bottom" Background="Wheat" Foreground="Black" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <TextBox Grid.Row="1" Text="{Binding CaptionText, Mode=TwoWay}" VerticalAlignment="Bottom" Background="Wheat" Foreground="Black" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                         <Button x:Name="DeleteClipButton" Content="X" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="DeleteClipButton_Tapped"/>
                     </Grid>
                 </DataTemplate>
